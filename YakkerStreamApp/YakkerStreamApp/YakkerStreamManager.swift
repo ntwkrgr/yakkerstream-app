@@ -26,6 +26,18 @@ class YakkerStreamManager: ObservableObject {
     @Published var errorMessage: String?
     @Published var terminalLines: [String] = []
     
+    // User configurable settings
+    @Published var yakkerDomain: String {
+        didSet {
+            UserDefaults.standard.set(yakkerDomain, forKey: "yakkerDomain")
+        }
+    }
+    @Published var authKey: String {
+        didSet {
+            UserDefaults.standard.set(authKey, forKey: "authKey")
+        }
+    }
+    
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
     private static let startupDelay: TimeInterval = 2.0
@@ -101,7 +113,11 @@ class YakkerStreamManager: ObservableObject {
     private var metricsTimer: Timer?
     private var statusCheckTimer: Timer?
     
-    private init() {}
+    private init() {
+        // Load saved settings or use defaults
+        self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? "angelosubb.yakkertech.com"
+        self.authKey = UserDefaults.standard.string(forKey: "authKey") ?? "Basic d2VidWk6Q3J1Y2lhbCBTaHVmZmxlIE5ldmVy"
+    }
     
     func startStream() {
         guard !isRunning else { return }
@@ -139,9 +155,13 @@ class YakkerStreamManager: ObservableObject {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         
-        // Change to repo directory and run yakker.sh in live mode
+        // Build websocket URL from domain
+        let wsUrl = "wss://\(yakkerDomain)/api/v2/ws-events"
+        let authHeader = "Authorization: \(authKey)"
+        
+        // Change to repo directory and run yakker.sh with custom settings
         let script = """
-        cd "\(repoPath)" && ./yakker.sh
+        cd "\(repoPath)" && ./yakker.sh --ws-url "\(wsUrl)" --auth-header "\(authHeader)"
         """
         
         process.arguments = ["-c", script]

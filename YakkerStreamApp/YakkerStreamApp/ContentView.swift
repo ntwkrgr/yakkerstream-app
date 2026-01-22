@@ -5,7 +5,7 @@ struct ContentView: View {
     
     // UI Constants - used to size the standalone window
     private static let windowWidth: CGFloat = 260
-    private static let windowHeight: CGFloat = 420
+    private static let windowHeight: CGFloat = 580
     
     var body: some View {
         VStack(spacing: 18) {
@@ -18,6 +18,34 @@ struct ContentView: View {
                     .bold()
             }
             .padding(.top)
+            
+            Divider()
+            
+            // Settings Section
+            VStack(spacing: 12) {
+                Text("Settings")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Yakker Domain:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    TextField("domain.yakkertech.com", text: $manager.yakkerDomain)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .disabled(manager.isRunning)
+                }
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Authorization Key:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    TextField("Basic ...", text: $manager.authKey)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .disabled(manager.isRunning)
+                }
+            }
+            .padding(.horizontal)
             
             Divider()
             
