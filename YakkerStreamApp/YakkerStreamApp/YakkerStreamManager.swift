@@ -21,7 +21,9 @@ struct YakkerMetrics {
 // Keychain helper for secure storage of sensitive credentials
 class KeychainHelper {
     static func save(key: String, value: String) -> Bool {
-        let data = value.data(using: .utf8)!
+        guard let data = value.data(using: .utf8) else {
+            return false
+        }
         
         // Delete any existing item first
         let deleteQuery: [String: Any] = [
@@ -179,7 +181,7 @@ class YakkerStreamManager: ObservableObject {
         // Validate domain input
         guard isValidDomain(yakkerDomain) else {
             connectionStatus = .error
-            errorMessage = "Invalid domain format. Please enter a valid yakkertech.com domain."
+            errorMessage = "Invalid domain format. Please enter a valid domain (e.g., yourdomain.yakkertech.com)."
             notifyStatusChange()
             return
         }
@@ -569,7 +571,8 @@ class YakkerStreamManager: ObservableObject {
     
     private func isValidDomain(_ domain: String) -> Bool {
         // Validate domain format to prevent injection attacks
-        let domainPattern = "^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$"
+        // Pattern allows: subdomain.domain.tld or domain.tld
+        let domainPattern = "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$"
         let domainRegex = try? NSRegularExpression(pattern: domainPattern, options: [])
         let range = NSRange(location: 0, length: domain.utf16.count)
         return domainRegex?.firstMatch(in: domain, options: [], range: range) != nil
