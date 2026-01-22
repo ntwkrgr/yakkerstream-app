@@ -1,0 +1,5 @@
+
+<ProPresenter_Scoreboard.RVSportsData defaultGameTime="20:00" clockFormat="H:MM:SS" timeOutDuration="1:00" timeOutOverlayUUID="" liveDataFilePath="file:///Users/crogers8/Code/yakker-stream/livedata.xml" showClock="false" showRadar="false" showHorn="false" showAuxClock="false" holdSpeed="false" autoCalculateTotals="true" innings="9" strikes="3" timeOuts="3" trys="4" conversion="2" dropGoal="1" penalty="2" liveDataEnabled="true" gameClockType="0">
+    <array rvXMLIvarName="macros"></array>
+    <array rvXMLIvarName="keyCodes"></array>
+</ProPresenter_Scoreboard.RVSportsData>

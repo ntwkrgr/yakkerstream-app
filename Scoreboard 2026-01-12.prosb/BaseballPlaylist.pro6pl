@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<RVPlaylistDocument versionNumber="600">
+    <RVPlaylistNode displayName="root" UUID="5874C0B0-289E-486D-871F-51BC452E07BC" smartDirectoryURL="" modifiedDate="2026-01-12T15:31:57-06:00" type="0" isExpanded="false" hotFolderType="2" targetZoneUUID="" rvXMLIvarName="rootNode">
+        <array rvXMLIvarName="children"/>
+        <array rvXMLIvarName="events"/>
+    </RVPlaylistNode>
+    <array rvXMLIvarName="deletions"/>
+    <array rvXMLIvarName="tags"/>
+</RVPlaylistDocument>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<RVPlaylistDocument versionNumber="600">
+    <RVPlaylistNode displayName="root" UUID="24EB5CF3-2581-4DCE-951A-5331EEAE71B6" smartDirectoryURL="" modifiedDate="2026-01-12T15:31:58-06:00" type="0" isExpanded="false" hotFolderType="2" targetZoneUUID="" rvXMLIvarName="rootNode">
+        <array rvXMLIvarName="children">
+            <RVPlaylistNode displayName="Media" UUID="F57F31DB-D7CE-40CC-B611-0D1D8F39DCCB" smartDirectoryURL="" modifiedDate="2026-01-12T15:31:58-06:00" type="6" isExpanded="false" hotFolderType="2" targetZoneUUID="">
+                <array rvXMLIvarName="children"/>
+                <array rvXMLIvarName="events"/>
+            </RVPlaylistNode>
+        </array>
+        <array rvXMLIvarName="events"/>
+    </RVPlaylistNode>
+    <array rvXMLIvarName="deletions"/>
+    <array rvXMLIvarName="tags"/>
+</RVPlaylistDocument>
