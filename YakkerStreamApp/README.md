@@ -5,6 +5,7 @@ A native macOS menu bar application for controlling and monitoring the Yakker St
 ## Features
 
 - **Menu Bar Interface**: Lives in your menu bar - no dock icon
+- **User-Configurable Credentials**: Enter your own Yakker domain and authorization key
 - **Connection Status Indicator**: Real-time visual feedback on connection status
   - ⚾️ ✓ - Connected and running
   - ⚾️ ... - Connecting
@@ -58,17 +59,23 @@ The app needs to find the `yakker.sh` script to launch the backend. You have two
 
 2. **Access the menu**: Click the baseball icon (⚾️) in your menu bar
 
-3. **Start the stream**: Click the "Start Stream" button
-   - The app will automatically start the Python backend in demo mode
+3. **Configure settings** (first time or to change):
+   - Enter your Yakker domain (e.g., "yourdomain.yakkertech.com")
+   - Enter your authorization key (e.g., "Basic YOUR_AUTH_TOKEN")
+   - Settings are saved automatically and persist between launches
+   - If not changed, defaults to angelosubb.yakkertech.com
+
+4. **Start the stream**: Click the "Start Stream" button
+   - The app will automatically start the Python backend with your configured settings
    - Connection status will update to show when it's ready
 
-4. **View metrics**: Live metrics will appear in the menu once the stream is running
+5. **View metrics**: Live metrics will appear in the menu once the stream is running
 
-5. **Open web interface**: Click the localhost:8000 link to view the full web interface
+6. **Open web interface**: Click the localhost:8000 link to view the full web interface
 
-6. **Stop the stream**: Click the "Stop Stream" button
+7. **Stop the stream**: Click the "Stop Stream" button
 
-7. **Quit**: Click "Quit" at the bottom of the menu
+8. **Quit**: Click "Quit" at the bottom of the menu
 
 ## Technical Details
 
@@ -83,7 +90,7 @@ The app consists of three main components:
 ### Backend Integration
 
 - Launches the Python backend using the existing `yakker.sh` script
-- Runs in demo mode by default for testing
+- Uses custom Yakker domain and authorization key from user settings
 - Polls `http://localhost:8000/data.xml` every second for metrics
 - Monitors process status to detect crashes or unexpected exits
 
@@ -95,21 +102,16 @@ The app consists of three main components:
 
 ## Customization
 
-### Change Backend Mode
+### Changing Default Settings
 
-To use live Yakker data instead of demo mode, edit `YakkerStreamManager.swift`:
+The app stores your Yakker domain and authorization key in macOS UserDefaults. To reset to defaults:
 
-```swift
-// Change this line in startStream():
-let script = """
-cd "\(repoPath)" && ./yakker.sh --demo
-"""
-
-// To this:
-let script = """
-cd "\(repoPath)" && ./yakker.sh
-"""
+```bash
+defaults delete com.yakkerstream.YakkerStreamApp yakkerDomain
+defaults delete com.yakkerstream.YakkerStreamApp authKey
 ```
+
+Or simply clear the fields in the app UI and enter new values.
 
 ### Change Port
 

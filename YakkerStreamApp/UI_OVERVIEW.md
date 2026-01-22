@@ -18,6 +18,20 @@ When you click the menu bar icon, a popover appears with:
 ⚾️ Yakker Stream
 ```
 
+### Settings Section
+```
+Settings
+
+Yakker Domain:
+[domain.yakkertech.com]
+
+Authorization Key:
+[Basic ...]
+```
+- Text fields for entering custom yakker domain and auth key
+- Fields are disabled while stream is running
+- Values are saved automatically and persist between app launches
+
 ### Connection Status Section
 ```
 Connection Status: ● Connected
@@ -74,36 +88,45 @@ http://localhost:8000
 2. **Click Menu Bar Icon**
    - Popover slides down from menu bar
    - Shows current connection status
+   - Displays settings fields (pre-filled from saved settings)
    - Displays control button
 
-3. **Click "Start Stream"**
+3. **Configure Settings** (optional)
+   - Enter custom Yakker domain (e.g., "yourdomain.yakkertech.com")
+   - Enter authorization key (e.g., "Basic YOUR_AUTH_TOKEN")
+   - Settings are saved automatically when changed
+   - If not changed, defaults to angelosubb.yakkertech.com with default auth key
+
+4. **Click "Start Stream"**
+   - Settings fields become disabled (locked)
    - Button changes to "Stop Stream" (red)
    - Status changes to "Connecting..." (⚾️ ...)
-   - Backend Python process launches
+   - Backend Python process launches with custom domain and auth key
    - After ~2-3 seconds, status changes to "Connected" (⚾️ ✓)
    - Metrics begin updating every second
 
-4. **View Metrics**
+5. **View Metrics**
    - Metrics refresh automatically from backend
    - Values displayed in monospaced font
    - "--" shown when no data available
 
-5. **Click Web Link** (optional)
+6. **Click Web Link** (optional)
    - Opens http://localhost:8000 in default browser
    - Shows full web interface with auto-refresh
 
-6. **Click "Stop Stream"**
+7. **Click "Stop Stream"**
    - Backend process terminates
    - Status changes to "Disconnected" (⚾️ ✗)
    - Button changes to "Start Stream" (green)
+   - Settings fields become enabled again
    - Metrics cleared
 
-7. **Click Outside Popover**
+8. **Click Outside Popover**
    - Popover closes
    - Menu bar icon remains visible
    - Stream continues running in background
 
-8. **Click "Quit"**
+9. **Click "Quit"**
    - Stops stream if running
    - Terminates application
    - Menu bar icon disappears
