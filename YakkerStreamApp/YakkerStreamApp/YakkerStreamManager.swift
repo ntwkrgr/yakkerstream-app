@@ -175,6 +175,10 @@ class YakkerStreamManager: ObservableObject {
         self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
     }
     
+    func hasSavedCredentials() -> Bool {
+        return !yakkerDomain.isEmpty && !authKey.isEmpty
+    }
+    
     func startStream() {
         guard !isRunning else { return }
         

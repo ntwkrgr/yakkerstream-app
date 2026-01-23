@@ -3,10 +3,13 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
     @State private var showingHelp = false
+    @State private var settingsExpanded = false
+    @State private var hasInitialized = false
     
     // UI Constants - used to size the standalone window
     private static let windowWidth: CGFloat = 260
     private static let windowHeight: CGFloat = 580
+    private static let repoIssuesURL = "https://github.com/ntwkrgr/yakker-to-proscoreboard/issues"
     
     var body: some View {
         VStack(spacing: 18) {
@@ -23,42 +26,48 @@ struct ContentView: View {
             Divider()
             
             // Settings Section
-            VStack(spacing: 12) {
-                HStack {
-                    Text("Settings")
-                        .font(.headline)
-                    Spacer()
-                    Button(action: {
-                        showingHelp = true
-                    }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "questionmark.circle")
-                            Text("How to Get Credentials")
+            DisclosureGroup(
+                isExpanded: $settingsExpanded,
+                content: {
+                    VStack(spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Yakker Domain:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            TextField("yourdomain.yakkertech.com", text: $manager.yakkerDomain)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .disabled(manager.isRunning)
                         }
-                        .font(.caption)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Authorization Key:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            TextField("Basic YOUR_AUTH_KEY_HERE", text: $manager.authKey)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .disabled(manager.isRunning)
+                        }
                     }
-                    .buttonStyle(PlainButtonStyle())
+                    .padding(.top, 8)
+                },
+                label: {
+                    HStack {
+                        Text("Settings")
+                            .font(.headline)
+                        Spacer()
+                        Button(action: {
+                            showingHelp = true
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "questionmark.circle")
+                                Text("How to Get Credentials")
+                            }
+                            .font(.caption)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Yakker Domain:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    TextField("yourdomain.yakkertech.com", text: $manager.yakkerDomain)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .disabled(manager.isRunning)
-                }
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Authorization Key:")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    TextField("Basic YOUR_AUTH_KEY_HERE", text: $manager.authKey)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .disabled(manager.isRunning)
-                }
-            }
+            )
             .padding(.horizontal)
             
             Divider()
@@ -73,11 +82,28 @@ struct ContentView: View {
                 }
                 
                 if let error = manager.errorMessage {
-                    Text(error)
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
+                    VStack(spacing: 6) {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                        
+                        // Add link to issues page for troubleshooting
+                        Button(action: {
+                            if let url = URL(string: Self.repoIssuesURL) {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "questionmark.circle")
+                                Text("Get Help")
+                            }
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
                 }
             }
             .padding(.horizontal)
@@ -146,6 +172,23 @@ struct ContentView: View {
         .frame(minWidth: Self.windowWidth, minHeight: Self.windowHeight)
         .sheet(isPresented: $showingHelp) {
             HelpView()
+        }
+        .onAppear {
+            // Set initial settings expansion state based on saved credentials
+            // Only do this once on first appearance
+            if !hasInitialized {
+                settingsExpanded = !manager.hasSavedCredentials()
+                hasInitialized = true
+            }
+        }
+        .onChange(of: manager.connectionStatus) { status in
+            // Expand settings when connection fails, collapse when connected
+            if status == .error {
+                settingsExpanded = true
+            } else if status == .connected {
+                // Collapse settings once successfully connected
+                settingsExpanded = false
+            }
         }
     }
     
