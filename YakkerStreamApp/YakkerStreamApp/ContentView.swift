@@ -3,17 +3,12 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
     @State private var showingHelp = false
-    @State private var settingsExpanded: Bool
+    @State private var settingsExpanded = false
+    @State private var hasInitialized = false
     
     // UI Constants - used to size the standalone window
     private static let windowWidth: CGFloat = 260
     private static let windowHeight: CGFloat = 580
-    
-    init() {
-        // Expand settings by default if no saved credentials, collapse if credentials exist
-        let hasSavedCredentials = YakkerStreamManager.shared.hasSavedCredentials()
-        _settingsExpanded = State(initialValue: !hasSavedCredentials)
-    }
     
     var body: some View {
         VStack(spacing: 18) {
@@ -176,6 +171,14 @@ struct ContentView: View {
         .frame(minWidth: Self.windowWidth, minHeight: Self.windowHeight)
         .sheet(isPresented: $showingHelp) {
             HelpView()
+        }
+        .onAppear {
+            // Set initial settings expansion state based on saved credentials
+            // Only do this once on first appearance
+            if !hasInitialized {
+                settingsExpanded = !manager.hasSavedCredentials()
+                hasInitialized = true
+            }
         }
         .onChange(of: manager.connectionStatus) { status in
             // Expand settings when connection fails, collapse when connected
