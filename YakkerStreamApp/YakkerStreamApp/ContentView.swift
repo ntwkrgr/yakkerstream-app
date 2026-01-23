@@ -52,7 +52,7 @@ struct ContentView: View {
                 },
                 label: {
                     HStack {
-                        Text("Settings")
+                        Text("Credentials")
                             .font(.headline)
                         Spacer()
                         Button(action: {

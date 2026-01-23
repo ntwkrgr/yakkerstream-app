@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		150AD1C42F1FF0B80060EC32 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 150AD1C32F1FF0B80060EC32 /* AppIcon.icon */; };
+		15F424BD2F23E908009D673A /* appicon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 15F424BC2F23E908009D673A /* appicon.icon */; };
 		A10000001C7E8A7D00000001 /* YakkerStreamAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000000 /* YakkerStreamAppApp.swift */; };
 		A10000001C7E8A7D00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000003 /* ContentView.swift */; };
 		A10000001C7E8A7D00000004 /* YakkerStreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000005 /* YakkerStreamManager.swift */; };
@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		150AD1C32F1FF0B80060EC32 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		15F424BC2F23E908009D673A /* appicon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = appicon.icon; sourceTree = "<group>"; };
 		A10000001C7E8A7D00000000 /* YakkerStreamAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YakkerStreamAppApp.swift; sourceTree = "<group>"; };
 		A10000001C7E8A7D00000003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A10000001C7E8A7D00000005 /* YakkerStreamManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YakkerStreamManager.swift; sourceTree = "<group>"; };
@@ -45,7 +45,7 @@
 				A10000001C7E8A7D00000007 /* Assets.xcassets */,
 				A10000001C7E8A7D00000009 /* YakkerStreamApp.entitlements */,
 				A10000001C7E8A7D0000000A /* Info.plist */,
-				150AD1C32F1FF0B80060EC32 /* AppIcon.icon */,
+				15F424BC2F23E908009D673A /* appicon.icon */,
 			);
 			path = YakkerStreamApp;
 			sourceTree = "<group>";
@@ -125,7 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000001C7E8A7D00000006 /* Assets.xcassets in Resources */,
-				150AD1C42F1FF0B80060EC32 /* AppIcon.icon in Resources */,
+				15F424BD2F23E908009D673A /* appicon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
