@@ -26,9 +26,37 @@ struct ContentView: View {
             Divider()
             
             // Settings Section
-            DisclosureGroup(
-                isExpanded: $settingsExpanded,
-                content: {
+            VStack(alignment: .leading, spacing: 0) {
+                // Clickable header
+                Button(action: {
+                    withAnimation {
+                        settingsExpanded.toggle()
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: settingsExpanded ? "chevron.down" : "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text("Credentials")
+                            .font(.headline)
+                        Spacer()
+                        Button(action: {
+                            showingHelp = true
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "questionmark.circle")
+                                Text("How to Get Credentials")
+                            }
+                            .font(.caption)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                // Expandable content
+                if settingsExpanded {
                     VStack(spacing: 12) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Yakker Domain:")
@@ -49,25 +77,9 @@ struct ContentView: View {
                         }
                     }
                     .padding(.top, 8)
-                },
-                label: {
-                    HStack {
-                        Text("Credentials")
-                            .font(.headline)
-                        Spacer()
-                        Button(action: {
-                            showingHelp = true
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "questionmark.circle")
-                                Text("How to Get Credentials")
-                            }
-                            .font(.caption)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
+                    .transition(.opacity)
                 }
-            )
+            }
             .padding(.horizontal)
             
             Divider()
