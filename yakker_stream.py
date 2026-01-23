@@ -22,10 +22,10 @@ from typing import Awaitable, Callable, Dict, List, Optional, TypedDict, Union
 from aiohttp import ClientConnectorError, ClientSession, WSMsgType, web
 
 DEFAULT_WS_URL = os.getenv(
-    "YAKKER_WS_URL", "wss://angelosubb.yakkertech.com/api/v2/ws-events"
+    "YAKKER_WS_URL", ""
 )
 DEFAULT_AUTH_RAW = os.getenv(
-    "YAKKER_AUTH_HEADER", "Authorization: Basic d2VidWk6Q3J1Y2lhbCBTaHVmZmxlIE5ldmVy"
+    "YAKKER_AUTH_HEADER", ""
 )
 DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "8000"))
 POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
