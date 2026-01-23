@@ -9,6 +9,7 @@ struct ContentView: View {
     // UI Constants - used to size the standalone window
     private static let windowWidth: CGFloat = 260
     private static let windowHeight: CGFloat = 580
+    private static let repoIssuesURL = "https://github.com/ntwkrgr/yakker-to-proscoreboard/issues"
     
     var body: some View {
         VStack(spacing: 18) {
@@ -90,7 +91,7 @@ struct ContentView: View {
                         
                         // Add link to issues page for troubleshooting
                         Button(action: {
-                            if let url = URL(string: "https://github.com/ntwkrgr/yakker-to-proscoreboard/issues") {
+                            if let url = URL(string: Self.repoIssuesURL) {
                                 NSWorkspace.shared.open(url)
                             }
                         }) {
