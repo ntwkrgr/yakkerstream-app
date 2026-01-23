@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import Security
 
 enum ConnectionStatus {
     case disconnected
@@ -17,6 +18,61 @@ struct YakkerMetrics {
     var hangTime: String?
 }
 
+// Keychain helper for secure storage of sensitive credentials
+class KeychainHelper {
+    static func save(key: String, value: String) -> Bool {
+        guard let data = value.data(using: .utf8) else {
+            return false
+        }
+        
+        // Delete any existing item first
+        let deleteQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key
+        ]
+        SecItemDelete(deleteQuery as CFDictionary)
+        
+        // Add new item
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecValueData as String: data
+        ]
+        
+        let status = SecItemAdd(query as CFDictionary, nil)
+        return status == errSecSuccess
+    }
+    
+    static func load(key: String) -> String? {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecReturnData as String: true
+        ]
+        
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        
+        guard status == errSecSuccess,
+              let data = result as? Data,
+              let value = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+        
+        return value
+    }
+    
+    static func delete(key: String) -> Bool {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key
+        ]
+        
+        let status = SecItemDelete(query as CFDictionary)
+        return status == errSecSuccess
+    }
+}
+
 class YakkerStreamManager: ObservableObject {
     static let shared = YakkerStreamManager()
     
@@ -25,6 +81,18 @@ class YakkerStreamManager: ObservableObject {
     @Published var metrics = YakkerMetrics()
     @Published var errorMessage: String?
     @Published var terminalLines: [String] = []
+    
+    // User configurable settings
+    @Published var yakkerDomain: String {
+        didSet {
+            UserDefaults.standard.set(yakkerDomain, forKey: "yakkerDomain")
+        }
+    }
+    @Published var authKey: String {
+        didSet {
+            _ = KeychainHelper.save(key: "yakkerAuthKey", value: authKey)
+        }
+    }
     
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
@@ -101,10 +169,30 @@ class YakkerStreamManager: ObservableObject {
     private var metricsTimer: Timer?
     private var statusCheckTimer: Timer?
     
-    private init() {}
+    private init() {
+        // Load saved settings or use empty placeholders (non-functional defaults)
+        self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? ""
+        self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
+    }
     
     func startStream() {
         guard !isRunning else { return }
+        
+        // Check if settings are configured
+        if yakkerDomain.isEmpty || authKey.isEmpty {
+            connectionStatus = .error
+            errorMessage = "Please configure your Yakker domain and authorization key before starting."
+            notifyStatusChange()
+            return
+        }
+        
+        // Validate domain input
+        guard isValidDomain(yakkerDomain) else {
+            connectionStatus = .error
+            errorMessage = "Invalid domain format. Please enter a valid domain (e.g., yourdomain.yakkertech.com)."
+            notifyStatusChange()
+            return
+        }
         
         // Find the repository root directory
         let repoPath = findRepoPath()
@@ -139,9 +227,18 @@ class YakkerStreamManager: ObservableObject {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         
-        // Change to repo directory and run yakker.sh in live mode
+        // Build websocket URL from domain
+        let wsUrl = "wss://\(yakkerDomain)/api/v2/ws-events"
+        let authHeader = "Authorization: \(authKey)"
+        
+        // Properly escape shell arguments to prevent injection
+        let escapedRepoPath = shellEscape(repoPath)
+        let escapedWsUrl = shellEscape(wsUrl)
+        let escapedAuthHeader = shellEscape(authHeader)
+        
+        // Change to repo directory and run yakker.sh with custom settings
         let script = """
-        cd "\(repoPath)" && ./yakker.sh
+        cd \(escapedRepoPath) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
         """
         
         process.arguments = ["-c", script]
@@ -478,5 +575,20 @@ class YakkerStreamManager: ObservableObject {
     
     private func notifyStatusChange() {
         NotificationCenter.default.post(name: NSNotification.Name("ConnectionStatusChanged"), object: nil)
+    }
+    
+    private func isValidDomain(_ domain: String) -> Bool {
+        // Validate domain format to prevent injection attacks
+        // Pattern allows: subdomain.domain.tld or domain.tld
+        let domainPattern = "^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.[a-zA-Z]{2,}(\\.[a-zA-Z]{2,})?$"
+        let domainRegex = try? NSRegularExpression(pattern: domainPattern, options: [])
+        let range = NSRange(location: 0, length: domain.utf16.count)
+        return domainRegex?.firstMatch(in: domain, options: [], range: range) != nil
+    }
+    
+    private func shellEscape(_ string: String) -> String {
+        // Escape shell special characters by wrapping in single quotes
+        // and escaping any existing single quotes
+        return "'\(string.replacingOccurrences(of: "'", with: "'\\''"))'"
     }
 }

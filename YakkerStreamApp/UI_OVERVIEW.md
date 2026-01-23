@@ -1,22 +1,29 @@
 # Yakker Stream App - UI Overview
 
-## Menu Bar Icon States
+## Application Window
 
-The app displays a baseball emoji in the macOS menu bar with different status indicators:
-
-- **⚾️ ✓** - Connected and streaming data
-- **⚾️ ...** - Connecting to backend
-- **⚾️ ✗** - Disconnected
-- **⚾️ ⚠️** - Error state
-
-## Main Popover Interface
-
-When you click the menu bar icon, a popover appears with:
+The app displays a standard macOS window with connection status and controls.
 
 ### Header Section
 ```
 ⚾️ Yakker Stream
 ```
+
+### Settings Section
+```
+Settings                    [? How to Get Credentials]
+
+Yakker Domain:
+[yourdomain.yakkertech.com]
+
+Authorization Key:
+[Basic YOUR_AUTH_KEY_HERE]
+```
+- Text fields for entering custom yakker domain and auth key
+- "How to Get Credentials" button opens detailed help window
+- Fields are disabled while stream is running
+- Values are saved automatically and persist between app launches
+- Empty by default (user must configure before first use)
 
 ### Connection Status Section
 ```
@@ -67,20 +74,22 @@ http://localhost:8000
 ## Interaction Flow
 
 1. **Launch App**
-   - Baseball icon appears in menu bar
-   - Shows disconnected status (⚾️ ✗)
-   - No dock icon (menu bar only)
+   - App window opens
+   - Shows disconnected status
+   - Settings fields are empty (require configuration)
 
-2. **Click Menu Bar Icon**
-   - Popover slides down from menu bar
-   - Shows current connection status
-   - Displays control button
+2. **Configure Settings** (required on first run)
+   - Click "How to Get Credentials" for detailed instructions
+   - Enter custom Yakker domain (e.g., "yourdomain.yakkertech.com")
+   - Enter authorization key (e.g., "Basic YOUR_AUTH_TOKEN")
+   - Settings are saved automatically when changed
 
 3. **Click "Start Stream"**
+   - Settings fields become disabled (locked)
    - Button changes to "Stop Stream" (red)
-   - Status changes to "Connecting..." (⚾️ ...)
-   - Backend Python process launches
-   - After ~2-3 seconds, status changes to "Connected" (⚾️ ✓)
+   - Status changes to "Connecting..."
+   - Backend Python process launches with custom domain and auth key
+   - After ~2-3 seconds, status changes to "Connected"
    - Metrics begin updating every second
 
 4. **View Metrics**
@@ -96,25 +105,20 @@ http://localhost:8000
    - Backend process terminates
    - Status changes to "Disconnected" (⚾️ ✗)
    - Button changes to "Start Stream" (green)
+   - Settings fields become enabled again
+   - Metrics cleared
+6. **Click "Stop Stream"**
+   - Backend process terminates
+   - Status changes to "Disconnected"
+   - Button changes to "Start Stream" (green)
+   - Settings fields become enabled again
    - Metrics cleared
 
-7. **Click Outside Popover**
-   - Popover closes
-   - Menu bar icon remains visible
-   - Stream continues running in background
-
-8. **Click "Quit"**
+7. **Click "Quit"**
    - Stops stream if running
    - Terminates application
-   - Menu bar icon disappears
 
 ## Technical Implementation
-
-### Menu Bar Setup
-- Uses `LSUIElement = YES` in Info.plist to hide dock icon
-- `NSStatusBar.system.statusItem` for menu bar presence
-- `NSPopover` with `transient` behavior for auto-dismiss
-- `NSHostingController` bridges SwiftUI to AppKit
 
 ### Connection Monitoring
 - ObservableObject pattern for reactive UI updates

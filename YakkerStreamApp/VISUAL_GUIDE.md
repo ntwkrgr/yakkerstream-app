@@ -1,21 +1,25 @@
-# Yakker Stream Menu Bar App - Visual Guide
+# Yakker Stream App - Visual Guide
 
-## Menu Bar Icon
-
-```
-┌────────────────────────────────────────────────────────┐
-│  🍎   📁   🔍   ⚾️ ✓   🔋   📶   🕐 Mon 2:30 PM        │
-└────────────────────────────────────────────────────────┘
-                    ↑
-              Click here to open
-```
-
-## Popover Interface (400×500 pixels)
+## Application Window
 
 ```
 ┌──────────────────────────────────────────┐
 │                                          │
 │           ⚾️ Yakker Stream               │
+│                                          │
+├──────────────────────────────────────────┤
+│                                          │
+│  Settings    [? How to Get Credentials]  │
+│                                          │
+│  Yakker Domain:                          │
+│  ┌────────────────────────────────────┐  │
+│  │ yourdomain.yakkertech.com          │  │
+│  └────────────────────────────────────┘  │
+│                                          │
+│  Authorization Key:                      │
+│  ┌────────────────────────────────────┐  │
+│  │ Basic YOUR_AUTH_KEY_HERE           │  │
+│  └────────────────────────────────────┘  │
 │                                          │
 ├──────────────────────────────────────────┤
 │                                          │
@@ -54,34 +58,34 @@
 
 ### 1. Disconnected
 ```
-Menu Bar: ⚾️ ✗
 Status: ● Disconnected (gray dot)
 Button: [▶️ Start Stream] (green)
+Settings: Editable
 Metrics: "Start the stream to view metrics"
 ```
 
 ### 2. Connecting
 ```
-Menu Bar: ⚾️ ...
 Status: ● Connecting... (yellow dot)
 Button: [🛑 Stop Stream] (red, disabled)
+Settings: Locked (disabled)
 Metrics: "Start the stream to view metrics"
 ```
 
 ### 3. Connected
 ```
-Menu Bar: ⚾️ ✓
 Status: ● Connected (green dot)
 Button: [🛑 Stop Stream] (red, active)
+Settings: Locked (disabled)
 Metrics: Live values updating every second
 ```
 
 ### 4. Error
 ```
-Menu Bar: ⚾️ ⚠️
 Status: ● Error (red dot)
-Error: "Connection error - check logs"
+Error: "Please configure your Yakker domain and authorization key"
 Button: [▶️ Start Stream] (green)
+Settings: Editable
 Metrics: "--" for all values
 ```
 
@@ -91,56 +95,6 @@ Metrics: "--" for all values
 Launch App
     │
     ▼
-⚾️ ✗ appears in menu bar
-    │
-    ▼
-Click menu bar icon
-    │
-    ▼
-┌───────────────────┐
-│   Popover opens   │
-│  Status: ✗        │
-│  Button: Start    │
-└───────────────────┘
-    │
-    ▼
-Click "Start Stream"
-    │
-    ├─────────────────────────┐
-    │                         │
-    ▼                         ▼
-Status: ⚾️ ...          Backend launches
-Connecting...            yakker.sh --demo
-    │                         │
-    └─────────────────────────┘
-                  │
-                  ▼
-         ⚾️ ✓ Connected!
-                  │
-                  ▼
-    ┌─────────────────────────┐
-    │  Metrics auto-update    │
-    │  Every 1 second via     │
-    │  HTTP poll to backend   │
-    └─────────────────────────┘
-                  │
-      ┌───────────┴───────────┐
-      │                       │
-      ▼                       ▼
-Click outside           Click "Stop Stream"
-Popover closes          Backend terminates
-(keeps running)         Status: ⚾️ ✗
-      │                       │
-      │                       │
-      └───────────────────────┘
-                  │
-                  ▼
-            Click "Quit"
-                  │
-                  ▼
-         App terminates
-       Menu icon disappears
-```
 
 ## Architecture Diagram
 
@@ -245,3 +199,52 @@ yakker-stream/
 - [✓] Web interface quick link
 - [✓] Clean shutdown on quit
 - [✓] Transient popover (auto-dismiss)
+App window opens
+    │
+    ▼
+Settings empty (first run)
+    │
+    ▼
+Click "How to Get Credentials"
+    │
+    ▼
+Read instructions
+    │
+    ▼
+Enter domain and auth key
+    │
+    ▼
+Click "Start Stream"
+    │
+    ├─────────────────────────┐
+    │                         │
+    ▼                         ▼
+Status: Connecting...    Backend launches
+Settings: Locked         with custom credentials
+    │                         │
+    └─────────────────────────┘
+                  │
+                  ▼
+         ✓ Connected!
+                  │
+                  ▼
+    ┌─────────────────────────┐
+    │  Metrics auto-update    │
+    │  Every 1 second via     │
+    │  HTTP poll to backend   │
+    └─────────────────────────┘
+                  │
+                  ▼
+          Click "Stop Stream"
+                  │
+                  ▼
+          Backend terminates
+          Status: Disconnected
+          Settings: Unlocked
+                  │
+                  ▼
+            Click "Quit"
+                  │
+                  ▼
+         App terminates
+```
