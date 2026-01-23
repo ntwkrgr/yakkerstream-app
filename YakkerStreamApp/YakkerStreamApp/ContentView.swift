@@ -45,7 +45,6 @@ struct ContentView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     .accessibilityLabel(settingsExpanded ? "Collapse Credentials" : "Expand Credentials")
-                    .contentShape(Rectangle())
                     
                     Spacer()
                     
@@ -83,7 +82,6 @@ struct ContentView: View {
                         }
                     }
                     .padding(.top, 8)
-                    .transition(.opacity)
                 }
             }
             .padding(.horizontal)
