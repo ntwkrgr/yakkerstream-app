@@ -170,13 +170,21 @@ class YakkerStreamManager: ObservableObject {
     private var statusCheckTimer: Timer?
     
     private init() {
-        // Load saved settings or use defaults
-        self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? "angelosubb.yakkertech.com"
-        self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? "Basic d2VidWk6Q3J1Y2lhbCBTaHVmZmxlIE5ldmVy"
+        // Load saved settings or use empty placeholders (non-functional defaults)
+        self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? ""
+        self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
     }
     
     func startStream() {
         guard !isRunning else { return }
+        
+        // Check if settings are configured
+        if yakkerDomain.isEmpty || authKey.isEmpty {
+            connectionStatus = .error
+            errorMessage = "Please configure your Yakker domain and authorization key before starting."
+            notifyStatusChange()
+            return
+        }
         
         // Validate domain input
         guard isValidDomain(yakkerDomain) else {

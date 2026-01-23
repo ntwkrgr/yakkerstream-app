@@ -1,11 +1,11 @@
-# Yakker Stream macOS Menu Bar App
+# Yakker Stream macOS App
 
-A native macOS menu bar application for controlling and monitoring the Yakker Stream backend.
+A native macOS application for controlling and monitoring the Yakker Stream backend.
 
 ## Features
 
-- **Menu Bar Interface**: Lives in your menu bar - no dock icon
 - **User-Configurable Credentials**: Enter your own Yakker domain and authorization key
+- **Built-in Help**: Step-by-step guide to obtain your credentials
 - **Connection Status Indicator**: Real-time visual feedback on connection status
   - ⚾️ ✓ - Connected and running
   - ⚾️ ... - Connecting
@@ -57,25 +57,25 @@ The app needs to find the `yakker.sh` script to launch the backend. You have two
 
 1. **Launch the app**: Double-click YakkerStreamApp in your Applications folder
 
-2. **Access the menu**: Click the baseball icon (⚾️) in your menu bar
-
-3. **Configure settings** (first time or to change):
+2. **Configure settings** (first time or to change):
+   - Click "How to Get Credentials" button for detailed instructions
    - Enter your Yakker domain (e.g., "yourdomain.yakkertech.com")
    - Enter your authorization key (e.g., "Basic YOUR_AUTH_TOKEN")
    - Settings are saved automatically and persist between launches
-   - If not changed, defaults to angelosubb.yakkertech.com
 
-4. **Start the stream**: Click the "Start Stream" button
+3. **Start the stream**: Click the "Start Stream" button
    - The app will automatically start the Python backend with your configured settings
    - Connection status will update to show when it's ready
 
-5. **View metrics**: Live metrics will appear in the menu once the stream is running
+4. **View metrics**: Live metrics will appear once the stream is running
 
-6. **Open web interface**: Click the localhost:8000 link to view the full web interface
+5. **Open web interface**: Click the localhost:8000 link to view the full web interface
 
 7. **Stop the stream**: Click the "Stop Stream" button
 
-8. **Quit**: Click "Quit" at the bottom of the menu
+6. **Stop the stream**: Click the "Stop Stream" button
+
+7. **Quit**: Click "Quit" at the bottom of the window
 
 ## Technical Details
 
@@ -83,8 +83,8 @@ The app needs to find the `yakker.sh` script to launch the backend. You have two
 
 The app consists of three main components:
 
-1. **YakkerStreamAppApp.swift**: Main app entry point with menu bar setup
-2. **ContentView.swift**: SwiftUI interface for the menu popover
+1. **YakkerStreamAppApp.swift**: Main app entry point
+2. **ContentView.swift**: SwiftUI interface for the app window
 3. **YakkerStreamManager.swift**: Business logic for managing the Python backend
 
 ### Backend Integration
@@ -94,21 +94,14 @@ The app consists of three main components:
 - Polls `http://localhost:8000/data.xml` every second for metrics
 - Monitors process status to detect crashes or unexpected exits
 
-### Menu Bar Behavior
-
-- The app uses `LSUIElement = YES` in Info.plist to hide from the dock
-- Status bar icon updates based on connection state
-- Popover shows on click and dismisses when clicking outside
-
 ## Customization
 
-### Changing Default Settings
+### Changing Settings
 
-The app stores your Yakker domain and authorization key in macOS UserDefaults. To reset to defaults:
+The app stores your Yakker domain in UserDefaults and authorization key in macOS Keychain. To reset:
 
 ```bash
 defaults delete com.yakkerstream.YakkerStreamApp yakkerDomain
-defaults delete com.yakkerstream.YakkerStreamApp authKey
 ```
 
 Or simply clear the fields in the app UI and enter new values.
@@ -134,10 +127,11 @@ cd /path/to/yakker-stream
 ./yakker.sh --demo
 ```
 
-### Menu bar icon doesn't appear
+### "Please configure your Yakker domain and authorization key"
 
-- Check System Preferences > Dock & Menu Bar > Clock > Show date and time
-- If your menu bar is full, the icon might be hidden under the "»" overflow menu
+This means you need to enter your credentials:
+- Click "How to Get Credentials" button in the app for detailed instructions
+- Enter your Yakker domain and authorization key in the Settings section
 
 ### Metrics not updating
 

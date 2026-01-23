@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
+    @State private var showingHelp = false
     
     // UI Constants - used to size the standalone window
     private static let windowWidth: CGFloat = 260
@@ -23,15 +24,28 @@ struct ContentView: View {
             
             // Settings Section
             VStack(spacing: 12) {
-                Text("Settings")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    Text("Settings")
+                        .font(.headline)
+                    Spacer()
+                    Button(action: {
+                        showingHelp = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "questionmark.circle")
+                            Text("How to Get Credentials")
+                        }
+                        .font(.caption)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Yakker Domain:")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    TextField("domain.yakkertech.com", text: $manager.yakkerDomain)
+                    TextField("yourdomain.yakkertech.com", text: $manager.yakkerDomain)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .disabled(manager.isRunning)
                 }
@@ -40,7 +54,7 @@ struct ContentView: View {
                     Text("Authorization Key:")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                    TextField("Basic ...", text: $manager.authKey)
+                    TextField("Basic YOUR_AUTH_KEY_HERE", text: $manager.authKey)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .disabled(manager.isRunning)
                 }
@@ -130,6 +144,9 @@ struct ContentView: View {
             .padding(.bottom)
         }
         .frame(minWidth: Self.windowWidth, minHeight: Self.windowHeight)
+        .sheet(isPresented: $showingHelp) {
+            HelpView()
+        }
     }
     
     private var connectionStatusView: some View {
@@ -231,3 +248,115 @@ private struct TerminalLogView: View {
         }
     }
 }
+
+// Help view that explains how to obtain Yakker credentials
+struct HelpView: View {
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                HStack {
+                    Text("How to Get Your Yakker Credentials")
+                        .font(.title2)
+                        .bold()
+                    Spacer()
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+                .padding(.bottom, 10)
+                
+                Divider()
+                
+                // Domain section
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("Finding Your Yakker Domain", systemImage: "globe")
+                        .font(.headline)
+                    
+                    Text("The Yakker domain is the same one you use to log into YakkerTech via your web browser.")
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("1. Open your web browser")
+                        Text("2. Navigate to your YakkerTech dashboard")
+                        Text("3. Look at the URL in the address bar")
+                        Text("4. Copy the domain portion (e.g., \"yourdomain.yakkertech.com\")")
+                    }
+                    .font(.system(size: 13))
+                    .padding(.leading, 10)
+                    
+                    Text("Example:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("If you access YakkerTech at https://myteam.yakkertech.com, your domain is: myteam.yakkertech.com")
+                        .font(.system(size: 12, design: .monospaced))
+                        .padding(8)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                }
+                
+                Divider()
+                
+                // Authorization Key section
+                VStack(alignment: .leading, spacing: 10) {
+                    Label("Finding Your Authorization Key", systemImage: "key.fill")
+                        .font(.headline)
+                    
+                    Text("The authorization key can be obtained from your browser's developer tools.")
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("For Chrome/Safari/Firefox:")
+                            .font(.subheadline)
+                            .bold()
+                        Text("1. Open YakkerTech in your browser and log in")
+                        Text("2. Open Developer Tools:")
+                        Text("   • Chrome/Safari: Right-click → Inspect")
+                        Text("   • Firefox: Right-click → Inspect Element")
+                        Text("   • Or press F12 (Windows) or Cmd+Option+I (Mac)")
+                        Text("3. Click the \"Network\" tab")
+                        Text("4. Refresh the page (F5 or Cmd+R)")
+                        Text("5. Look for requests to \"ws-events\" or \"api\"")
+                        Text("6. Click on one of these requests")
+                        Text("7. Find the \"Request Headers\" section")
+                        Text("8. Look for \"Authorization\" header")
+                        Text("9. Copy the entire value (e.g., \"Basic ABC123...\")")
+                    }
+                    .font(.system(size: 13))
+                    .padding(.leading, 10)
+                    
+                    Text("Example:")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Text("Authorization: Basic d2VidWk6Q3J1Y2lhbFNodWZmbGVOZXZlcg==")
+                        .font(.system(size: 11, design: .monospaced))
+                        .padding(8)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(6)
+                    
+                    Text("Note: Copy the entire value including \"Basic\" prefix")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                }
+                
+                Divider()
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Tips", systemImage: "lightbulb.fill")
+                        .font(.headline)
+                        .foregroundColor(.yellow)
+                    
+                    Text("• Your authorization key is like a password - keep it secure")
+                    Text("• If you have trouble finding the key, contact your YakkerTech administrator")
+                    Text("• The key may expire - if connection fails, try obtaining a fresh key")
+                }
+                .font(.system(size: 13))
+                
+            }
+            .padding()
+        }
+        .frame(minWidth: 500, minHeight: 600)
+    }
+}
+

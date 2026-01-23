@@ -114,11 +114,12 @@ Yakker Domain:
 ## User Interaction Flow
 
 ### First Time Launch
-1. App launches with default values pre-filled
-2. User sees: "angelosubb.yakkertech.com" and "Basic d2VidWk..."
-3. User can either:
-   - Use defaults → Click "Start Stream"
-   - Change values → Enter custom domain/key → Click "Start Stream"
+1. App launches with empty fields (placeholders shown)
+2. User sees: "yourdomain.yakkertech.com" and "Basic YOUR_AUTH_KEY_HERE" as placeholder text
+3. User must:
+   - Click "How to Get Credentials" to see instructions
+   - Enter valid domain and authorization key
+   - Click "Start Stream" to connect
 
 ### Changing Settings
 ```
@@ -142,15 +143,15 @@ Yakker Domain:
 ```
 Session 1: User enters "custom.yakkertech.com"
            ↓
-           Setting saved to UserDefaults
+           Setting saved to UserDefaults/Keychain
            ↓
            User quits app
            
 Session 2: User launches app again
            ↓
-           Settings auto-load from UserDefaults
+           Settings auto-load
            ↓
-           Field shows "custom.yakkertech.com" (not default)
+           Field shows "custom.yakkertech.com" (saved value)
 ```
 
 ## Security Features Visible to User
