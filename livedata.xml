@@ -44,10 +44,10 @@
       <batord spot="" name="" uni="" pos="" />
     </batords>
     <totals> <!--- Hitting: H = Exit Velo, RBI = Launch Angle, Double = Hit Distance, Triple = Hangtime - Pitching: ER = Pitch Velo, Pitches = Spin Rate -->
-      <hitting ab="" r="" h="88.0" rbi="26.8" double="313" triple="4.1" hr="" bb="" sb="" cs="" hbp="" sh="" sf="" so="" gdp="" ibb="" picked="" ground="" fly="" kl="" hitdp="" hittp="" />
+      <hitting ab="" r="" h="87.9" rbi="30.3" double="287" triple="3.6" hr="" bb="" sb="" cs="" hbp="" sh="" sf="" so="" gdp="" ibb="" picked="" ground="" fly="" kl="" hitdp="" hittp="" />
       <fielding po="" a="" e="" pb="" ci="" indp="" />
       <hsitsummary adv="" fly="" ground="" lob="" rbi-2out="" vsleft="" advops="" leadoff="" pinchhit="" w2outs="" wloaded="" wrbiops="" wrunners="" rbi3rd="" />
-      <pitching ip="" ab="" bb="" bf="" bk="" double="" er="43.0" fly="" ground="" h="" hbp="" hr="" ibb="" kl="" r="" so="" triple="" wp="" picked="" sha="" sfa="" gdp="" pitches="1072" strikes="" />
+      <pitching ip="" ab="" bb="" bf="" bk="" double="" er="44.7" fly="" ground="" h="" hbp="" hr="" ibb="" kl="" r="" so="" triple="" wp="" picked="" sha="" sfa="" gdp="" pitches="1031" strikes="" />
       <psitsummary fly="" ground="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
     </totals>
     <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
