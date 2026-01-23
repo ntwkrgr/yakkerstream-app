@@ -1,8 +1,8 @@
 {
   "fill" : {
     "linear-gradient" : [
-      "extended-srgb:0.20392,0.78039,0.34902,1.00000",
-      "display-p3:0.80609,0.50592,0.30378,1.00000"
+      "display-p3:0.31189,0.88488,0.42150,1.00000",
+      "display-p3:0.20472,0.65416,0.34513,1.00000"
     ],
     "orientation" : {
       "start" : {
@@ -19,9 +19,15 @@
     {
       "layers" : [
         {
-          "glass" : true,
-          "image-name" : "distance.png",
-          "name" : "distance"
+          "image-name" : "spinrate.png",
+          "name" : "spinrate",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         }
       ],
       "shadow" : {
