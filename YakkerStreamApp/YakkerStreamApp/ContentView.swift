@@ -28,32 +28,38 @@ struct ContentView: View {
             // Settings Section
             VStack(alignment: .leading, spacing: 0) {
                 // Clickable header
-                Button(action: {
-                    withAnimation {
-                        settingsExpanded.toggle()
-                    }
-                }) {
-                    HStack {
-                        Image(systemName: settingsExpanded ? "chevron.down" : "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text("Credentials")
-                            .font(.headline)
-                        Spacer()
-                        Button(action: {
-                            showingHelp = true
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "questionmark.circle")
-                                Text("How to Get Credentials")
-                            }
-                            .font(.caption)
+                HStack {
+                    Button(action: {
+                        withAnimation {
+                            settingsExpanded.toggle()
                         }
-                        .buttonStyle(PlainButtonStyle())
+                    }) {
+                        HStack {
+                            Image(systemName: settingsExpanded ? "chevron.down" : "chevron.right")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .accessibilityHidden(true)
+                            Text("Credentials")
+                                .font(.headline)
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .accessibilityLabel(settingsExpanded ? "Collapse Credentials" : "Expand Credentials")
                     .contentShape(Rectangle())
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        showingHelp = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "questionmark.circle")
+                            Text("How to Get Credentials")
+                        }
+                        .font(.caption)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
                 
                 // Expandable content
                 if settingsExpanded {
