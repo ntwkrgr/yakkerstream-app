@@ -20,26 +20,31 @@ A native macOS application for controlling and monitoring the Yakker Stream back
   - Hit Distance (ft)
   - Hang Time (sec)
 - **Web Interface Link**: Quick access to the browser interface
+- **Fully Self-Contained**: All Python scripts and dependencies bundled in the app
 
 ## Requirements
 
 - macOS 13.0 or later
 - Xcode 15.0 or later (for building)
-- Python 3.7+ (for the backend)
+- Python 3.7+ (will be used at runtime to execute the backend)
 
 ## Installation
 
-### Important: App Placement
+### Simple Installation (Recommended)
 
-The app needs to find the `yakker.sh` script to launch the backend. You have two options:
+The app is now fully self-contained and can be installed anywhere on your Mac:
 
-**Option 1 (Recommended)**: Place the entire `yakker-stream` folder in one of these locations:
-- `~/yakker-stream`
-- `~/Desktop/yakker-stream`
-- `~/Documents/yakker-stream`
-- `~/Downloads/yakker-stream`
+1. Build the app using the build script (see "Building the App" below)
+2. Copy `YakkerStreamApp.app` to your `/Applications` folder, or run it from anywhere
+3. Double-click to launch - no need to worry about script locations!
 
-**Option 2**: Keep the app bundle next to `yakker.sh` in the repository folder.
+**The app includes everything it needs:**
+- Python backend script (`yakker_stream.py`)
+- Configuration template (`livedata.xml.template`)
+- Dependencies list (`requirements.txt`)
+- Startup script (`yakker_bundled.sh`)
+
+All files are bundled inside the app, so you can move it anywhere without breaking functionality.
 
 ## Building the App
 
@@ -53,9 +58,17 @@ The app needs to find the `yakker.sh` script to launch the backend. You have two
 
 3. Build and run (⌘R) or archive for distribution
 
+**Or use the build script:**
+```bash
+cd YakkerStreamApp
+./build.sh
+```
+
+The built app will be in `./build/Build/Products/Release/YakkerStreamApp.app`
+
 ## Using the App
 
-1. **Launch the app**: Double-click YakkerStreamApp in your Applications folder
+1. **Launch the app**: Double-click YakkerStreamApp anywhere on your Mac
 
 2. **Configure settings** (first time or to change):
    - Click "How to Get Credentials" button for detailed instructions
@@ -64,14 +77,12 @@ The app needs to find the `yakker.sh` script to launch the backend. You have two
    - Settings are saved automatically and persist between launches
 
 3. **Start the stream**: Click the "Start Stream" button
-   - The app will automatically start the Python backend with your configured settings
+   - The app will automatically set up Python dependencies on first run (stored in `~/.yakker-stream`)
    - Connection status will update to show when it's ready
 
 4. **View metrics**: Live metrics will appear once the stream is running
 
 5. **Open web interface**: Click the localhost:8000 link to view the full web interface
-
-7. **Stop the stream**: Click the "Stop Stream" button
 
 6. **Stop the stream**: Click the "Stop Stream" button
 
@@ -89,10 +100,20 @@ The app consists of three main components:
 
 ### Backend Integration
 
-- Launches the Python backend using the existing `yakker.sh` script
+- All Python scripts are bundled inside the app's Resources folder
+- Virtual environment is created in `~/.yakker-stream` on first run
+- Launches the Python backend using the bundled `yakker_bundled.sh` script
 - Uses custom Yakker domain and authorization key from user settings
 - Polls `http://localhost:8000/data.xml` every second for metrics
 - Monitors process status to detect crashes or unexpected exits
+
+### What's Bundled
+
+The app includes these resources in its bundle:
+- `yakker_bundled.sh` - Startup script that handles Python environment setup
+- `yakker_stream.py` - Main Python backend that connects to Yakker and serves data
+- `livedata.xml.template` - ProScoreboard XML template
+- `requirements.txt` - Python dependencies (aiohttp)
 
 ## Customization
 
@@ -118,14 +139,14 @@ The app currently uses port 8000. To change it, update the port in:
 
 This can happen if:
 - Python is not installed or not in the PATH
-- The yakker.sh script is not executable
-- Required Python dependencies are missing
+- Required Python dependencies failed to install
+- Port 8000 is already in use
 
-Run the backend manually first to diagnose:
-```bash
-cd /path/to/yakker-stream
-./yakker.sh --demo
-```
+First-time setup requires internet to download Python dependencies (aiohttp).
+
+### "Bundled script not found in app resources"
+
+This means the app was not built correctly. Rebuild using Xcode or the build.sh script to ensure all resources are included in the bundle.
 
 ### "Please configure your Yakker domain and authorization key"
 
@@ -138,6 +159,13 @@ This means you need to enter your credentials:
 - Verify the backend is running (check Activity Monitor for Python processes)
 - Test the endpoint directly: open http://localhost:8000 in a browser
 - Check Console.app for error messages from the app
+
+### Permission Issues
+
+If macOS blocks the app from running:
+1. Right-click the app and select "Open"
+2. Click "Open" in the security dialog
+3. Or go to System Settings > Privacy & Security and allow the app
 
 ## License
 

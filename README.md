@@ -28,8 +28,11 @@ If you prefer a native Mac app with a menu bar interface:
 1. Download and build the YakkerStreamApp from the `YakkerStreamApp` folder
 2. Open `YakkerStreamApp.xcodeproj` in Xcode
 3. Build and run the app (⌘R)
-4. Click the baseball icon (⚾️) in your menu bar
-5. Click "Start Stream" to begin
+4. Install to Applications or run from anywhere - **the app is fully self-contained!**
+5. Click the baseball icon (⚾️) in your menu bar
+6. Click "Start Stream" to begin
+
+**New!** The app now bundles all necessary Python scripts internally. You can install it anywhere on your Mac without worrying about where other files are located.
 
 See [YakkerStreamApp/README.md](YakkerStreamApp/README.md) for detailed instructions.
 

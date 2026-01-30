@@ -11,8 +11,11 @@
 		A10000001C7E8A7D00000001 /* YakkerStreamAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000000 /* YakkerStreamAppApp.swift */; };
 		A10000001C7E8A7D00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000003 /* ContentView.swift */; };
 		A10000001C7E8A7D00000004 /* YakkerStreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000005 /* YakkerStreamManager.swift */; };
-		A10000001C7E8A7D00000006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000007 /* Assets.xcassets */; };
-/* End PBXBuildFile section */
+		14CFD9EB465F5936 /* yakker_bundled.sh in Resources */ = {isa = PBXBuildFile; fileRef = 14CFD9EB465F5935 /* yakker_bundled.sh */; };
+5318D34C68F7F60D /* yakker_stream.py in Resources */ = {isa = PBXBuildFile; fileRef = 5318D34C68F7F60C /* yakker_stream.py */; };
+7E0AC9CAF4D05897 /* livedata.xml.template in Resources */ = {isa = PBXBuildFile; fileRef = 7E0AC9CAF4D05896 /* livedata.xml.template */; };
+94D68C5FF57DFABB /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = 94D68C5FF57DFABA /* requirements.txt */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		15F424BC2F23E908009D673A /* appicon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = appicon.icon; sourceTree = "<group>"; };
@@ -22,8 +25,11 @@
 		A10000001C7E8A7D00000007 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10000001C7E8A7D00000008 /* YakkerStreamApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YakkerStreamApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000001C7E8A7D00000009 /* YakkerStreamApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YakkerStreamApp.entitlements; sourceTree = "<group>"; };
-		A10000001C7E8A7D0000000A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-/* End PBXFileReference section */
+		LCFD9EB465F5935 /* yakker_bundled.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = yakker_bundled.sh; sourceTree = "<group>"; };
+5318D34C68F7F60C /* yakker_stream.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = yakker_stream.py; sourceTree = "<group>"; };
+7E0AC9CAF4D05896 /* livedata.xml.template */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = livedata.xml.template; sourceTree = "<group>"; };
+94D68C5FF57DFABA /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A10000001C7E8A7D0000000B /* Frameworks */ = {
@@ -46,6 +52,7 @@
 				A10000001C7E8A7D00000009 /* YakkerStreamApp.entitlements */,
 				A10000001C7E8A7D0000000A /* Info.plist */,
 				15F424BC2F23E908009D673A /* appicon.icon */,
+A0DE0E1402642921 /* Resources */,
 			);
 			path = YakkerStreamApp;
 			sourceTree = "<group>";
@@ -66,7 +73,18 @@
 			);
 			sourceTree = "<group>";
 		};
-/* End PBXGroup section */
+A0DE0E1402642921 /* Resources */ = {
+isa = PBXGroup;
+children = (
+14CFD9EB465F5935 /* yakker_bundled.sh */,
+5318D34C68F7F60C /* yakker_stream.py */,
+7E0AC9CAF4D05896 /* livedata.xml.template */,
+94D68C5FF57DFABA /* requirements.txt */,
+);
+path = Resources;
+sourceTree = "<group>";
+};
+/* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		A10000001C7E8A7D0000000F /* YakkerStreamApp */ = {
@@ -125,7 +143,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000001C7E8A7D00000006 /* Assets.xcassets in Resources */,
-				15F424BD2F23E908009D673A /* appicon.icon in Resources */,
+				14CFD9EB465F5936 /* yakker_bundled.sh in Resources */,
+5318D34C68F7F60D /* yakker_stream.py in Resources */,
+7E0AC9CAF4D05897 /* livedata.xml.template in Resources */,
+94D68C5FF57DFABB /* requirements.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

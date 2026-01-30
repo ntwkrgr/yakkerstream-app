@@ -198,15 +198,21 @@ class YakkerStreamManager: ObservableObject {
             return
         }
         
-        // Find the repository root directory
-        let repoPath = findRepoPath()
-        let scriptPath = repoPath + "/yakker.sh"
+        // Use bundled script from app's Resources
+        guard let resourcePath = Bundle.main.resourcePath else {
+            connectionStatus = .error
+            errorMessage = "Could not find app resources"
+            notifyStatusChange()
+            return
+        }
         
-        // Check if yakker.sh exists
+        let scriptPath = resourcePath + "/yakker_bundled.sh"
+        
+        // Check if bundled script exists
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: scriptPath) else {
             connectionStatus = .error
-            errorMessage = "yakker.sh not found. Please ensure the app is in the same directory as yakker.sh or place yakker-stream in ~/yakker-stream"
+            errorMessage = "Bundled script not found in app resources"
             notifyStatusChange()
             return
         }
@@ -227,7 +233,7 @@ class YakkerStreamManager: ObservableObject {
         terminalLines.removeAll()
         notifyStatusChange()
         
-        // Start the Python backend
+        // Start the Python backend using bundled script
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         
@@ -236,13 +242,13 @@ class YakkerStreamManager: ObservableObject {
         let authHeader = "Authorization: \(authKey)"
         
         // Properly escape shell arguments to prevent injection
-        let escapedRepoPath = shellEscape(repoPath)
+        let escapedScriptPath = shellEscape(scriptPath)
         let escapedWsUrl = shellEscape(wsUrl)
         let escapedAuthHeader = shellEscape(authHeader)
         
-        // Change to repo directory and run yakker.sh with custom settings
+        // Run the bundled script with custom settings
         let script = """
-        cd \(escapedRepoPath) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
+        \(escapedScriptPath) --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
         """
         
         process.arguments = ["-c", script]
@@ -543,38 +549,6 @@ class YakkerStreamManager: ObservableObject {
         if killTask.terminationStatus != 0 {
             throw PortManagementError.failedToTerminate(pid)
         }
-    }
-    
-    private func findRepoPath() -> String {
-        // Get the bundle path and navigate to the repo root
-        let fileManager = FileManager.default
-        let currentPath = fileManager.currentDirectoryPath
-        let homeDir = NSHomeDirectory()
-        
-        // Common locations to check
-        var possiblePaths = [
-            currentPath,
-            homeDir + "/yakker-stream",
-            homeDir + "/Desktop/yakker-stream",
-            homeDir + "/Documents/yakker-stream",
-            homeDir + "/Downloads/yakker-stream",
-        ]
-        
-        // Add parent directory of the app bundle (works regardless of app name)
-        let bundleURL = URL(fileURLWithPath: Bundle.main.bundlePath)
-        if bundleURL.pathExtension == "app" {
-            possiblePaths.append(bundleURL.deletingLastPathComponent().path)
-        }
-        
-        for path in possiblePaths {
-            if fileManager.fileExists(atPath: path + "/yakker.sh") {
-                return path
-            }
-        }
-        
-        // If not found, return the home directory as fallback
-        // This will cause the script to fail with a clear error message
-        return homeDir + "/yakker-stream"
     }
     
     private func notifyStatusChange() {
