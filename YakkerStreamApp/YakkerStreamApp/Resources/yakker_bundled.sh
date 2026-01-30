@@ -14,8 +14,8 @@ for arg in "$@"; do
   elif [[ "$next_is_port" == "true" ]]; then
     if [[ "$arg" =~ ^[0-9]+$ ]]; then
       PORT="$arg"
+      break
     fi
-    break
   fi
 done
 
@@ -30,7 +30,7 @@ if ! command -v pip3 >/dev/null 2>&1; then
   exit 1
 fi
 
-# Create a temporary working directory for the virtual environment
+# Create a temporary working directory for the virtual environment and output files
 WORK_DIR="$HOME/.yakker-stream"
 mkdir -p "$WORK_DIR"
 
@@ -41,8 +41,16 @@ fi
 
 echo "📦 Installing dependencies..."
 source "$WORK_DIR/.venv/bin/activate"
-pip3 install --upgrade pip >/dev/null
-pip3 install -r "$SCRIPT_DIR/requirements.txt" >/dev/null
+
+# Install dependencies with error checking
+if ! pip3 install --upgrade pip 2>&1 | grep -q "Successfully installed\|already satisfied\|Requirement already satisfied"; then
+  echo "⚠️  Warning: pip upgrade may have failed, continuing..."
+fi
+
+if ! pip3 install -r "$SCRIPT_DIR/requirements.txt" 2>&1; then
+  echo "❌ Failed to install Python dependencies"
+  exit 1
+fi
 
 echo ""
 echo "✅ Ready! Starting Yakker stream..."
@@ -75,6 +83,8 @@ echo ""
 echo "📡 Connecting to Yakker data feed..."
 echo ""
 
-# Change to the script directory so yakker_stream.py can find livedata.xml.template
-cd "$SCRIPT_DIR"
-python3 yakker_stream.py "$@"
+# Run yakker_stream.py from the work directory so it can write livedata.xml there
+# Pass the template path as an environment variable
+cd "$WORK_DIR"
+export YAKKER_TEMPLATE_PATH="$SCRIPT_DIR/livedata.xml.template"
+python3 "$SCRIPT_DIR/yakker_stream.py" "$@"

@@ -462,10 +462,14 @@ async def periodic_updater(aggregator: MetricAggregator) -> None:
 
 async def update_livedata_xml(aggregator: MetricAggregator) -> None:
     """Update livedata.xml file every second with current Yakker data."""
-    # Get the directory where the script is located
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    template_path = os.path.join(script_dir, "livedata.xml.template")
-    livedata_path = os.path.join(script_dir, "livedata.xml")
+    # Get template path from environment variable or use script directory
+    template_path = os.getenv("YAKKER_TEMPLATE_PATH")
+    if template_path is None:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        template_path = os.path.join(script_dir, "livedata.xml.template")
+    
+    # Write livedata.xml to current working directory (which should be writable)
+    livedata_path = os.path.join(os.getcwd(), "livedata.xml")
     
     # Read template once at startup
     if not os.path.exists(template_path):
@@ -476,6 +480,7 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
         template_content = f.read()
     
     logging.info("Loaded livedata.xml template")
+    logging.info("Writing livedata.xml to: %s", livedata_path)
     
     while True:
         await asyncio.sleep(1.0)  # Update every second
@@ -584,8 +589,8 @@ def build_app(
     
     async def get_livedata_xml(_: web.Request) -> web.Response:
         """Returns the livedata.xml file"""
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        livedata_path = os.path.join(script_dir, "livedata.xml")
+        # livedata.xml is written to the current working directory
+        livedata_path = os.path.join(os.getcwd(), "livedata.xml")
         
         try:
             with open(livedata_path, 'r', encoding='utf-8') as f:

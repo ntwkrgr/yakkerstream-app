@@ -233,7 +233,7 @@ class YakkerStreamManager: ObservableObject {
         terminalLines.removeAll()
         notifyStatusChange()
         
-        // Start the Python backend using bundled script
+        // Start the Python backend using bundled script (runs directly from app resources)
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/bash")
         
@@ -246,7 +246,7 @@ class YakkerStreamManager: ObservableObject {
         let escapedWsUrl = shellEscape(wsUrl)
         let escapedAuthHeader = shellEscape(authHeader)
         
-        // Run the bundled script with custom settings
+        // Execute bundled script with custom settings (no directory change needed)
         let script = """
         \(escapedScriptPath) --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
         """
