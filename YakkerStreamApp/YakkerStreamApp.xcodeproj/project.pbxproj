@@ -12,6 +12,10 @@
 		A10000001C7E8A7D00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000003 /* ContentView.swift */; };
 		A10000001C7E8A7D00000004 /* YakkerStreamManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000005 /* YakkerStreamManager.swift */; };
 		A10000001C7E8A7D00000006 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000001C7E8A7D00000007 /* Assets.xcassets */; };
+		B10000001C7E8A7D00000001 /* yakker.sh in Resources */ = {isa = PBXBuildFile; fileRef = B10000001C7E8A7D00000002 /* yakker.sh */; };
+		B10000001C7E8A7D00000003 /* yakker_stream.py in Resources */ = {isa = PBXBuildFile; fileRef = B10000001C7E8A7D00000004 /* yakker_stream.py */; };
+		B10000001C7E8A7D00000005 /* requirements.txt in Resources */ = {isa = PBXBuildFile; fileRef = B10000001C7E8A7D00000006 /* requirements.txt */; };
+		B10000001C7E8A7D00000007 /* livedata.xml.template in Resources */ = {isa = PBXBuildFile; fileRef = B10000001C7E8A7D00000008 /* livedata.xml.template */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +27,10 @@
 		A10000001C7E8A7D00000008 /* YakkerStreamApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YakkerStreamApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000001C7E8A7D00000009 /* YakkerStreamApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = YakkerStreamApp.entitlements; sourceTree = "<group>"; };
 		A10000001C7E8A7D0000000A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B10000001C7E8A7D00000002 /* yakker.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = yakker.sh; sourceTree = "<group>"; };
+		B10000001C7E8A7D00000004 /* yakker_stream.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = yakker_stream.py; sourceTree = "<group>"; };
+		B10000001C7E8A7D00000006 /* requirements.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = requirements.txt; sourceTree = "<group>"; };
+		B10000001C7E8A7D00000008 /* livedata.xml.template */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = livedata.xml.template; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +44,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B10000001C7E8A7D00000009 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B10000001C7E8A7D00000002 /* yakker.sh */,
+				B10000001C7E8A7D00000004 /* yakker_stream.py */,
+				B10000001C7E8A7D00000006 /* requirements.txt */,
+				B10000001C7E8A7D00000008 /* livedata.xml.template */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		A10000001C7E8A7D0000000C /* YakkerStreamApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -46,6 +65,7 @@
 				A10000001C7E8A7D00000009 /* YakkerStreamApp.entitlements */,
 				A10000001C7E8A7D0000000A /* Info.plist */,
 				15F424BC2F23E908009D673A /* appicon.icon */,
+				B10000001C7E8A7D00000009 /* Resources */,
 			);
 			path = YakkerStreamApp;
 			sourceTree = "<group>";
@@ -126,6 +146,10 @@
 			files = (
 				A10000001C7E8A7D00000006 /* Assets.xcassets in Resources */,
 				15F424BD2F23E908009D673A /* appicon.icon in Resources */,
+				B10000001C7E8A7D00000001 /* yakker.sh in Resources */,
+				B10000001C7E8A7D00000003 /* yakker_stream.py in Resources */,
+				B10000001C7E8A7D00000005 /* requirements.txt in Resources */,
+				B10000001C7E8A7D00000007 /* livedata.xml.template in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

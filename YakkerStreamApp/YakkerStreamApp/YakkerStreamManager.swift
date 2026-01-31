@@ -168,11 +168,62 @@ class YakkerStreamManager: ObservableObject {
     private var process: Process?
     private var metricsTimer: Timer?
     private var statusCheckTimer: Timer?
-    
+
+    /// Directory where the app stores working files (venv, livedata.xml, etc.)
+    private static let workingDirectoryName = "YakkerStream"
+
     private init() {
         // Load saved settings or use empty placeholders (non-functional defaults)
         self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? ""
         self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
+    }
+
+    /// Returns the path to the app's working directory in Application Support
+    private func getWorkingDirectory() -> String {
+        let fileManager = FileManager.default
+        let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let workingDir = appSupport.appendingPathComponent(Self.workingDirectoryName)
+        return workingDir.path
+    }
+
+    /// Sets up the working directory by copying bundled scripts
+    private func setupWorkingDirectory() throws {
+        let fileManager = FileManager.default
+        let workingDir = getWorkingDirectory()
+
+        // Create working directory if it doesn't exist
+        if !fileManager.fileExists(atPath: workingDir) {
+            try fileManager.createDirectory(atPath: workingDir, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        // Get paths to bundled resources
+        guard let bundlePath = Bundle.main.resourcePath else {
+            throw NSError(domain: "YakkerStreamManager", code: 1, userInfo: [NSLocalizedDescriptionKey: "Could not find app bundle resources"])
+        }
+
+        // Files to copy from bundle to working directory
+        let filesToCopy = ["yakker.sh", "yakker_stream.py", "requirements.txt", "livedata.xml.template"]
+
+        for file in filesToCopy {
+            let sourcePath = (bundlePath as NSString).appendingPathComponent(file)
+            let destPath = (workingDir as NSString).appendingPathComponent(file)
+
+            // Check if source file exists in bundle
+            guard fileManager.fileExists(atPath: sourcePath) else {
+                throw NSError(domain: "YakkerStreamManager", code: 2, userInfo: [NSLocalizedDescriptionKey: "Bundled file not found: \(file)"])
+            }
+
+            // Remove existing file and copy fresh version (ensures updates are applied)
+            if fileManager.fileExists(atPath: destPath) {
+                try fileManager.removeItem(atPath: destPath)
+            }
+            try fileManager.copyItem(atPath: sourcePath, toPath: destPath)
+
+            // Make shell script executable
+            if file.hasSuffix(".sh") {
+                try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: destPath)
+            }
+        }
     }
     
     func hasSavedCredentials() -> Bool {
@@ -197,16 +248,25 @@ class YakkerStreamManager: ObservableObject {
             notifyStatusChange()
             return
         }
-        
-        // Find the repository root directory
-        let repoPath = findRepoPath()
-        let scriptPath = repoPath + "/yakker.sh"
-        
-        // Check if yakker.sh exists
+
+        // Set up working directory with bundled scripts
+        do {
+            try setupWorkingDirectory()
+        } catch {
+            connectionStatus = .error
+            errorMessage = "Failed to set up working directory: \(error.localizedDescription)"
+            notifyStatusChange()
+            return
+        }
+
+        let workingDir = getWorkingDirectory()
+        let scriptPath = (workingDir as NSString).appendingPathComponent("yakker.sh")
+
+        // Verify script was copied successfully
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: scriptPath) else {
             connectionStatus = .error
-            errorMessage = "yakker.sh not found. Please ensure the app is in the same directory as yakker.sh or place yakker-stream in ~/yakker-stream"
+            errorMessage = "Failed to set up yakker.sh in working directory"
             notifyStatusChange()
             return
         }
@@ -236,13 +296,13 @@ class YakkerStreamManager: ObservableObject {
         let authHeader = "Authorization: \(authKey)"
         
         // Properly escape shell arguments to prevent injection
-        let escapedRepoPath = shellEscape(repoPath)
+        let escapedWorkingDir = shellEscape(workingDir)
         let escapedWsUrl = shellEscape(wsUrl)
         let escapedAuthHeader = shellEscape(authHeader)
-        
-        // Change to repo directory and run yakker.sh with custom settings
+
+        // Change to working directory and run yakker.sh with custom settings
         let script = """
-        cd \(escapedRepoPath) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
+        cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
         """
         
         process.arguments = ["-c", script]
@@ -543,38 +603,6 @@ class YakkerStreamManager: ObservableObject {
         if killTask.terminationStatus != 0 {
             throw PortManagementError.failedToTerminate(pid)
         }
-    }
-    
-    private func findRepoPath() -> String {
-        // Get the bundle path and navigate to the repo root
-        let fileManager = FileManager.default
-        let currentPath = fileManager.currentDirectoryPath
-        let homeDir = NSHomeDirectory()
-        
-        // Common locations to check
-        var possiblePaths = [
-            currentPath,
-            homeDir + "/yakker-stream",
-            homeDir + "/Desktop/yakker-stream",
-            homeDir + "/Documents/yakker-stream",
-            homeDir + "/Downloads/yakker-stream",
-        ]
-        
-        // Add parent directory of the app bundle (works regardless of app name)
-        let bundleURL = URL(fileURLWithPath: Bundle.main.bundlePath)
-        if bundleURL.pathExtension == "app" {
-            possiblePaths.append(bundleURL.deletingLastPathComponent().path)
-        }
-        
-        for path in possiblePaths {
-            if fileManager.fileExists(atPath: path + "/yakker.sh") {
-                return path
-            }
-        }
-        
-        // If not found, return the home directory as fallback
-        // This will cause the script to fail with a clear error message
-        return homeDir + "/yakker-stream"
     }
     
     private func notifyStatusChange() {
