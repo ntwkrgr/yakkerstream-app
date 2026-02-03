@@ -341,16 +341,21 @@ async def process_payload(
         launch_display = _format_console_metric(summary.get("launch_angle_deg"), 1)
         distance_display = _format_console_metric(summary.get("hit_distance_ft"), 0)
         hangtime_display = _format_console_metric(summary.get("hangtime_sec"), 1)
-        logging.info(
-            "Event %s | Pitch Velo: %s mph | Spin: %s rpm | Exit Velo: %s mph | Launch: %s° | Distance: %s ft | Hangtime: %s s",
-            summary["event_id"],
-            pitch_display,
-            spin_display,
-            exit_display,
-            launch_display,
-            distance_display,
-            hangtime_display,
+        
+        # Use print with sys.stderr to output formatted metrics without timestamp prefixes
+        # Truncate event ID to last 6 characters for cleaner display
+        event_id_short = summary['event_id'][-6:] if summary['event_id'] else "N/A"
+        event_output = (
+            f"  -----------------------------\n"
+            f"Event {event_id_short}\n"
+            f"- Pitch Velo: {pitch_display} mph\n"
+            f"- Spin: {spin_display} rpm\n"
+            f"- Exit Velo: {exit_display} mph\n"
+            f"- Launch: {launch_display}°\n"
+            f"- Distance: {distance_display} ft\n"
+            f"- I'Hangtime: {hangtime_display} s\n"
         )
+        print(event_output, file=sys.stderr, flush=True)
     return summary
 
 

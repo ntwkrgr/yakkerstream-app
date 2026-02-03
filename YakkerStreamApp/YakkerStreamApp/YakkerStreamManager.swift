@@ -525,7 +525,6 @@ class YakkerStreamManager: ObservableObject {
     private func appendTerminalOutput(_ text: String, isError: Bool) {
         let lines = text
             .components(separatedBy: .newlines)
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
         guard !lines.isEmpty else { return }
         for line in lines {

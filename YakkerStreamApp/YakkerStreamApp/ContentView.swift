@@ -5,9 +5,10 @@ struct ContentView: View {
     @State private var showingHelp = false
     @State private var settingsExpanded = false
     @State private var hasInitialized = false
+    @State private var showCopiedFeedback = false
     
     // UI Constants - used to size the standalone window
-    private static let windowWidth: CGFloat = 260
+    private static let windowWidth: CGFloat = 520
     private static let windowHeight: CGFloat = 580
     private static let repoIssuesURL = "https://github.com/ntwkrgr/yakker-to-proscoreboard/issues"
     
@@ -136,26 +137,37 @@ struct ContentView: View {
             
             Spacer()
             
-            // Footer with web link
+            // Footer with copy URL button
             if manager.isRunning {
-                VStack(spacing: 4) {
+                VStack(spacing: 8) {
                     Text("Data Stream URL")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        .padding(.top, 6)
                     
                     Button(action: {
-                        if let url = URL(string: YakkerStreamManager.backendBaseURL + "/livedata.xml") {
-                            NSWorkspace.shared.open(url)
+                        let urlString = YakkerStreamManager.backendBaseURL + "/livedata.xml"
+                        NSPasteboard.general.clearContents()
+                        NSPasteboard.general.setString(urlString, forType: .string)
+                        
+                        // Show feedback
+                        showCopiedFeedback = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            showCopiedFeedback = false
                         }
                     }) {
-                        Text(YakkerStreamManager.backendBaseURL + "/livedata.xml")
-                            .font(.caption)
-                            .foregroundColor(.blue)
+                        HStack(spacing: 6) {
+                            Image(systemName: showCopiedFeedback ? "checkmark.circle.fill" : "doc.on.doc")
+                            Text(showCopiedFeedback ? "Copied!" : "Copy URL to Clipboard")
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(showCopiedFeedback ? Color.green.opacity(0.1) : Color.blue.opacity(0.1))
+                        .foregroundColor(showCopiedFeedback ? .green : .blue)
+                        .cornerRadius(6)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                .padding(.bottom)
+                .padding(.bottom, 8)
             }
             
             // Quit Button
@@ -254,7 +266,7 @@ extension ContentView {
             .padding(.bottom, 2)
             
             TerminalLogView(lines: manager.terminalLines)
-                .frame(minHeight: 140, maxHeight: 240)
+                .frame(minHeight: 200, maxHeight: 350)
         }
     }
 }
