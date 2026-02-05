@@ -27,9 +27,24 @@ struct ContentView: View {
             Divider()
             
             // Settings Section
-            DisclosureGroup(
-                isExpanded: $settingsExpanded,
-                content: {
+            VStack(alignment: .leading, spacing: 0) {
+                Button(action: {
+                    settingsExpanded.toggle()
+                }) {
+                    HStack {
+                        Image(systemName: settingsExpanded ? "chevron.down" : "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                        Text("Configuration")
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(PlainButtonStyle())
+                
+                if settingsExpanded {
                     VStack(spacing: 12) {
                         VStack(alignment: .leading, spacing: 8) {
                             Text("Yakker Domain:")
@@ -48,27 +63,41 @@ struct ContentView: View {
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .disabled(manager.isRunning)
                         }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("HTTP Port:")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            HStack {
+                                TextField("8000", value: $manager.httpPort, format: .number.grouping(.never))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .disabled(manager.isRunning)
+                                    .frame(width: 100)
+                                Text("(Default: 8000)")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                            }
+                        }
+                        
+                        // Help button moved inside
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                showingHelp = true
+                            }) {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "questionmark.circle")
+                                    Text("How to Get Credentials")
+                                }
+                                .font(.caption)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
                     }
                     .padding(.top, 8)
-                },
-                label: {
-                    HStack {
-                        Text("Credentials")
-                            .font(.headline)
-                        Spacer()
-                        Button(action: {
-                            showingHelp = true
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "questionmark.circle")
-                                Text("How to Get Credentials")
-                            }
-                            .font(.caption)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
                 }
-            )
+            }
             .padding(.horizontal)
             
             Divider()
@@ -145,7 +174,7 @@ struct ContentView: View {
                         .foregroundColor(.secondary)
                     
                     Button(action: {
-                        let urlString = YakkerStreamManager.backendBaseURL + "/livedata.xml"
+                        let urlString = manager.backendBaseURL + "/livedata.xml"
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(urlString, forType: .string)
                         

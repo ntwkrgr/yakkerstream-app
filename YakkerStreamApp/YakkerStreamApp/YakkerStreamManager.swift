@@ -93,6 +93,11 @@ class YakkerStreamManager: ObservableObject {
             _ = KeychainHelper.save(key: "yakkerAuthKey", value: authKey)
         }
     }
+    @Published var httpPort: Int {
+        didSet {
+            UserDefaults.standard.set(httpPort, forKey: "httpPort")
+        }
+    }
     
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
@@ -103,16 +108,22 @@ class YakkerStreamManager: ObservableObject {
     private static let statusCheckInterval: TimeInterval = 5.0
     /// Grace period for backend process to terminate cleanly before forcing interrupt
     private static let processTerminationDelay: TimeInterval = 1.0
-    /// HTTP port for backend server
-    static let backendPort = 8000
-    /// Base URL for backend HTTP endpoints
-    static let backendBaseURL = "http://localhost:\(backendPort)"
-    /// Convenience endpoint for livedata XML feed served by yakker_stream.py
-    private static let livedataEndpoint = backendBaseURL + "/livedata.xml"
+    /// Default HTTP port for backend server
+    static let defaultBackendPort = 8000
     /// Ignore exit velocity readings below this threshold (throwbacks, foul tips, etc.)
     private static let minimumExitVelocity: Double = 65.0
     /// Max terminal log lines to retain in UI
     private static let maxTerminalLines = 200
+    
+    /// Base URL for backend HTTP endpoints (computed based on current port setting)
+    var backendBaseURL: String {
+        return "http://localhost:\(httpPort)"
+    }
+    
+    /// Convenience endpoint for livedata XML feed served by yakker_stream.py
+    private var livedataEndpoint: String {
+        return backendBaseURL + "/livedata.xml"
+    }
     
     // Backend output patterns for connection detection
     private static let connectingPatterns = ["Connecting to Yakker", "Starting Yakker"]
@@ -176,6 +187,8 @@ class YakkerStreamManager: ObservableObject {
         // Load saved settings or use empty placeholders (non-functional defaults)
         self.yakkerDomain = UserDefaults.standard.string(forKey: "yakkerDomain") ?? ""
         self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
+        let savedPort = UserDefaults.standard.integer(forKey: "httpPort")
+        self.httpPort = savedPort > 0 ? savedPort : Self.defaultBackendPort
     }
 
     /// Returns the path to the app's working directory in Application Support
@@ -275,7 +288,7 @@ class YakkerStreamManager: ObservableObject {
             try freeBackendPort()
         } catch {
             connectionStatus = .error
-            errorMessage = "Port \(Self.backendPort) busy: \(error.localizedDescription)"
+            errorMessage = "Port \(httpPort) busy: \(error.localizedDescription)"
             notifyStatusChange()
             return
         }
@@ -302,7 +315,7 @@ class YakkerStreamManager: ObservableObject {
 
         // Change to working directory and run yakker.sh with custom settings
         let script = """
-        cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader)
+        cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader) --port \(httpPort)
         """
         
         process.arguments = ["-c", script]
@@ -414,7 +427,7 @@ class YakkerStreamManager: ObservableObject {
     
     private func verifyBackendConnection() {
         // Verify backend is actually responding before marking as connected
-        guard let url = URL(string: Self.livedataEndpoint) else {
+        guard let url = URL(string: livedataEndpoint) else {
             connectionStatus = .error
             errorMessage = "Invalid backend URL"
             notifyStatusChange()
@@ -447,7 +460,7 @@ class YakkerStreamManager: ObservableObject {
     }
     
     private func fetchMetrics() {
-        guard let url = URL(string: Self.livedataEndpoint) else { return }
+        guard let url = URL(string: livedataEndpoint) else { return }
         
         let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let self = self else { return }
@@ -571,7 +584,7 @@ class YakkerStreamManager: ObservableObject {
         let lsofPath = "/usr/sbin/lsof"
         let task = Process()
         task.executableURL = URL(fileURLWithPath: lsofPath)
-        task.arguments = ["-ti", "tcp:\(Self.backendPort)"]
+        task.arguments = ["-ti", "tcp:\(httpPort)"]
         let outputPipe = Pipe()
         task.standardOutput = outputPipe
         do {
