@@ -1,5 +1,7 @@
 # Yakker Stream App - UI Overview
 
+> **Version 1.0** - Feature complete release
+
 ## Application Window
 
 The app displays a standard macOS window with connection status and controls.
@@ -9,21 +11,26 @@ The app displays a standard macOS window with connection status and controls.
 ⚾️ Yakker Stream
 ```
 
-### Settings Section
+### Configuration Section (Collapsible)
 ```
-Settings                    [? How to Get Credentials]
+▶ Configuration              [? How to Get Credentials]
 
 Yakker Domain:
 [yourdomain.yakkertech.com]
 
 Authorization Key:
 [Basic YOUR_AUTH_KEY_HERE]
+
+HTTP Port:
+[8000]       (Default: 8000)
 ```
 - Text fields for entering custom yakker domain and auth key
+- HTTP port field to customize the backend server port
 - "How to Get Credentials" button opens detailed help window
 - Fields are disabled while stream is running
 - Values are saved automatically and persist between app launches
-- Empty by default (user must configure before first use)
+- Authorization key stored securely in macOS Keychain
+- Section collapses automatically when connected
 
 ### Connection Status Section
 ```
@@ -41,78 +48,75 @@ Connection Status: ● Connected
 [▶️ Start Stream] (green button when stopped)
 ```
 
-### Metrics Display Section
+### Live Output Section
 ```
-Live Metrics
+Live Output                                    Waiting...
 
-Exit Velocity    --    mph
-Launch Angle     --    °
-Pitch Velocity   --    mph
-Spin Rate        --    rpm
-Hit Distance     --    ft
-Hang Time        --    sec
+┌─────────────────────────────────────────────────────┐
+│ [info] Starting Yakker Stream...                    │
+│ [info] Connecting to YakkerTech websocket...        │
+│ [info] Connected to Yakker                          │
+│ [info] ProScoreboard XML API available at :8000     │
+│ Exit: 87.9 mph | Angle: 30.3° | Dist: 287 ft        │
+│ Pitch: 44.7 mph | Spin: 1031 rpm                    │
+└─────────────────────────────────────────────────────┘
 ```
+- Terminal-style scrolling log view
+- Shows backend output in real-time
+- Auto-scrolls to latest output
+- Dark background with monospaced font
 
-When the stream is running with data, metrics show actual values:
+### Footer Section (when running)
 ```
-Exit Velocity    87.9   mph
-Launch Angle     30.3   °
-Pitch Velocity   44.7   mph
-Spin Rate        1031   rpm
-Hit Distance     287    ft
-Hang Time        3.6    sec
-```
-
-### Footer Section
-```
-Web Interface
-http://localhost:8000
+Data Stream URL
+[Copy URL to Clipboard]
 
 [Quit]
 ```
+- Copy URL button copies the livedata.xml URL to clipboard
+- Shows "Copied!" feedback briefly after clicking
 
 ## Interaction Flow
 
 1. **Launch App**
    - App window opens
    - Shows disconnected status
-   - Settings fields are empty (require configuration)
+   - Configuration section expanded if no saved credentials
 
 2. **Configure Settings** (required on first run)
+   - Expand Configuration section if collapsed
    - Click "How to Get Credentials" for detailed instructions
    - Enter custom Yakker domain (e.g., "yourdomain.yakkertech.com")
    - Enter authorization key (e.g., "Basic YOUR_AUTH_TOKEN")
+   - Optionally change HTTP port (default: 8000)
    - Settings are saved automatically when changed
+   - Authorization key stored securely in macOS Keychain
 
 3. **Click "Start Stream"**
-   - Settings fields become disabled (locked)
+   - Configuration fields become disabled (locked)
    - Button changes to "Stop Stream" (red)
    - Status changes to "Connecting..."
-   - Backend Python process launches with custom domain and auth key
+   - Backend Python process launches with configured settings
+   - Live Output shows real-time backend logs
    - After ~2-3 seconds, status changes to "Connected"
-   - Metrics begin updating every second
+   - Configuration section auto-collapses
 
-4. **View Metrics**
-   - Metrics refresh automatically from backend
-   - Values displayed in monospaced font
-   - "--" shown when no data available
+4. **View Live Output**
+   - Backend logs displayed in terminal-style view
+   - Auto-scrolls to show latest output
+   - Shows connection status, data events, and metrics
 
-5. **Click Web Link** (optional)
-   - Opens http://localhost:8000 in default browser
-   - Shows full web interface with auto-refresh
+5. **Copy URL** (optional)
+   - Click "Copy URL to Clipboard" button
+   - URL is copied to system clipboard
+   - Button shows "Copied!" feedback
 
-6. **Click "Stop Stream"**
-   - Backend process terminates
-   - Status changes to "Disconnected" (⚾️ ✗)
-   - Button changes to "Start Stream" (green)
-   - Settings fields become enabled again
-   - Metrics cleared
 6. **Click "Stop Stream"**
    - Backend process terminates
    - Status changes to "Disconnected"
    - Button changes to "Start Stream" (green)
-   - Settings fields become enabled again
-   - Metrics cleared
+   - Configuration fields become enabled again
+   - Live output cleared
 
 7. **Click "Quit"**
    - Stops stream if running
@@ -127,16 +131,23 @@ http://localhost:8000
 - Process monitoring to detect crashes
 
 ### Backend Integration
+- Copies bundled scripts to Application Support directory
 - Launches `yakker.sh` script using Foundation.Process
-- Captures stdout/stderr for status detection
-- Polls `/data.xml` endpoint every 1 second
-- Simple regex parsing of XML for metrics extraction
+- Captures stdout/stderr for live terminal output
+- Polls `/livedata.xml` endpoint every 1 second
+- Regex parsing of XML for metrics extraction
 
 ### UI Components
 - SwiftUI for interface
 - Combine for reactive updates
 - URLSession for HTTP requests
 - NSWorkspace for browser launching
+- ScrollViewReader for auto-scrolling terminal output
+
+### Security
+- Authorization key stored in macOS Keychain
+- Domain validation to prevent injection attacks
+- Shell argument escaping for safe process launching
 
 ## App Size & Requirements
 
