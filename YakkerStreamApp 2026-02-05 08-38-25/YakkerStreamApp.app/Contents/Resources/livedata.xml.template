@@ -1,0 +1,1275 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bsgame source="" version="" generated="">
+  <venue visid="" homeid="" visname="" homename="" date="" location="" stadium="" duration="" delay="" attend="" leaguegame="" nitegame="" start="" schedinn="" weather="">
+    <umpires />
+    <notes>
+      <note text="" />
+    </notes>
+    <rules batters="" usedh="" />
+  </venue>
+  <team vh="" code="" id="" name="" record="">
+    <linescore line="" runs="" hits="" errs="" lob="">
+      <lineinn inn="" score="" /> 
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+    </linescore>
+    <starters>
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+    </starters>
+    <batords>
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+    </batords>
+    <totals> <!--- Hitting: H = Exit Velo, RBI = Launch Angle, Double = Hit Distance, Triple = Hangtime - Pitching: ER = Pitch Velo, Pitches = Spin Rate -->
+      <hitting ab="" r="" h="XXX-ExitVelo-XXX" rbi="XXX-LaunchAngle-XXX" double="XXX-HitDistance-XXX" triple="XXX-Hangtime-XXX" hr="" bb="" sb="" cs="" hbp="" sh="" sf="" so="" gdp="" ibb="" picked="" ground="" fly="" kl="" hitdp="" hittp="" />
+      <fielding po="" a="" e="" pb="" ci="" indp="" />
+      <hsitsummary adv="" fly="" ground="" lob="" rbi-2out="" vsleft="" advops="" leadoff="" pinchhit="" w2outs="" wloaded="" wrbiops="" wrunners="" rbi3rd="" />
+      <pitching ip="" ab="" bb="" bf="" bk="" double="" er="XXX-PitchVelo-XXX" fly="" ground="" h="" hbp="" hr="" ibb="" kl="" r="" so="" triple="" wp="" picked="" sha="" sfa="" gdp="" pitches="XXX-SpinRate-XXX" strikes="" />
+      <psitsummary fly="" ground="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+    </totals>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" sh="" so="" ground="" fly="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary adv="" fly="" ground="" lob="" vsleft="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation pitcher="" context="" ab="" r="" sh="" h="" rbi="" ground="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" sh="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation pos="" context="" ab="" kl="" r="" fly="" sh="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation spot="" context="" ab="" kl="" r="" fly="" sh="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" so="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" hbp="" ground="" fly="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary fly="" ground="" vsleft="" advops="" leadoff="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" hbp="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" hbp="" h="" rbi="" ground="" out="" />
+      <hsituation spot="" context="" ab="" r="" fly="" hbp="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ab="" r="" fly="" hbp="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" ground="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" hbp="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary vsleft="" advops="" wrunners="" />
+      <hsituation pitcher="" context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ab="" r="" double="" hbp="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation spot="" context="" ab="" r="" double="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" bb="" so="" ground="" fly="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" indp="" />
+      <hsitsummary adv="" fly="" ground="" lob="" vsleft="" advops="" w2outs="" wloaded="" wrbiops="" wrunners="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" r="" fly="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pos="" context="" bb="" ab="" kl="" r="" fly="" h="" rbi="" ground="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" r="" fly="" h="" rbi="" ground="" so="" out="" />
+      <hsituation spot="" context="" bb="" ab="" kl="" r="" fly="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <fsituation pos="" context="" indp="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" hr="" so="" ground="" fly="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary fly="" ground="" lob="" rbi-2out="" vsleft="" advops="" leadoff="" w2outs="" wloaded="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" hr="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" hr="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" hr="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" hr="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" hr="" out="" />
+      <hsituation pos="" context="" ab="" r="" fly="" h="" rbi="" hr="" ground="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" hr="" so="" out="" />
+      <hsituation spot="" context="" ab="" r="" fly="" h="" rbi="" hr="" ground="" so="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" so="" fly="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" indp="" />
+      <hsitsummary fly="" lob="" rbi-2out="" vsleft="" advops="" leadoff="" w2outs="" wloaded="" wrbiops="" wrunners="" />
+      <hsituation spot="" context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation pos="" context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" so="" out="" />
+      <fsituation pos="" context="" indp="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" bb="" sb="" so="" ground="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary ground="" lob="" vsleft="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation spot="" context="" bb="" ab="" kl="" r="" h="" rbi="" ground="" so="" out="" sb="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" ground="" so="" out="" sb="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" r="" h="" rbi="" ground="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" ground="" so="" out="" />
+      <hsituation pos="" context="" bb="" ab="" kl="" r="" h="" rbi="" ground="" so="" out="" sb="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" so="" fly="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary fly="" vsleft="" advops="" leadoff="" wrbiops="" wrunners="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation spot="" context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation context="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" bb="" ground="" fly="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" indp="" />
+      <hsitsummary fly="" ground="" advops="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation spot="" context="" bb="" ab="" r="" fly="" h="" rbi="" ground="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pos="" context="" bb="" ab="" r="" fly="" h="" rbi="" ground="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <fsituation pos="" context="" indp="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary />
+      <pitching appear="" ip="" gs="" ab="" bb="" bf="" double="" er="" fly="" ground="" gdp="" h="" hr="" kl="" r="" sha="" so="" pitches="" whip="" strikes="" />
+      <psitsummary fly="" ground="" picked="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+      <psituation context="" bb="" ab="" r="" bf="" double="" ip="" h="" hr="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" gdp="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" gdp="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" fly="" bf="" double="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" bf="" double="" ip="" h="" hr="" er="" r="" fly="" gdp="" ground="" so="" />
+      <psituation inn="" context="" bb="" ab="" r="" gdp="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" bf="" double="" ip="" h="" hr="" er="" r="" gdp="" fly="" ground="" so="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" double="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" bf="" double="" ip="" h="" ground="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" bf="" double="" ip="" h="" ground="" hr="" so="" er="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" sub="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary />
+      <pitching appear="" ip="" ab="" bf="" er="" fly="" ground="" gdp="" h="" hbp="" kl="" r="" so="" triple="" pitches="" whip="" loss="" strikes="" />
+      <psitsummary fly="" ground="" picked="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+      <psituation inn="" context="" bb="" ab="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" gdp="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" gdp="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" bf="" ip="" h="" er="" r="" fly="" triple="" hbp="" ground="" so="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" bf="" ip="" h="" er="" r="" gdp="" fly="" triple="" ground="" so="" />
+      <psituation context="" bb="" ab="" kl="" bf="" ip="" h="" er="" r="" gdp="" fly="" triple="" ground="" so="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" triple="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" hbp="" h="" ground="" so="" er="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+  </team>
+  <team vh="" code="" id="" name="" record="">
+    <linescore line="" runs="" hits="" errs="" lob="">
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+      <lineinn inn="" score="" />
+    </linescore>
+    <starters>
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+      <starter spot="" name="" uni="" pos="" />
+    </starters>
+    <batords>
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+      <batord spot="" name="" uni="" pos="" />
+    </batords>
+    <totals>
+      <hitting ab="" r="" h="" rbi="" double="" triple="" hr="" bb="" sb="" cs="" hbp="" sh="" sf="" so="" gdp="" ibb="" picked="" ground="" fly="" kl="" hitdp="" hittp="" />
+      <fielding po="" a="" e="" pb="" ci="" sba="" />
+      <hsitsummary adv="" fly="" ground="" lob="" rcherr="" rchfc="" rbi-2out="" vsleft="" advops="" leadoff="" pinchhit="" w2outs="" wloaded="" wrbiops="" wrunners="" rbi3rd="" />
+      <pitching ip="" ab="" bb="" bf="" bk="" double="" er="" fly="" ground="" h="" hbp="" hr="" ibb="" kl="" r="" so="" triple="" wp="" picked="" sha="" sfa="" gdp="" pitches="" strikes="" />
+      <psitsummary fly="" ground="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+    </totals>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" so="" fly="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary fly="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation spot="" context="" ue="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ue="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation pos="" context="" ue="" ab="" kl="" r="" fly="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" kl="" r="" double="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" double="" h="" rbi="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" so="" gdp="" ground="" kl="" hitdp="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary rcherr="" ground="" advops="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation context="" ab="" r="" rcherr="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" rcherr="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" gdp="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" ue="" ab="" kl="" r="" rcherr="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation spot="" context="" ue="" ab="" kl="" r="" rcherr="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" kl="" r="" rcherr="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" r="" rcherr="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ue="" ab="" kl="" r="" rcherr="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" r="" rcherr="" h="" rbi="" so="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" hr="" gdp="" ground="" hitdp="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary rchfc="" ground="" lob="" rbi-2out="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation context="" ue="" ab="" r="" h="" rbi="" hr="" out="" />
+      <hsituation context="" ue="" ab="" r="" h="" rbi="" hr="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" gdp="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" ue="" ab="" rchfc="" r="" gdp="" h="" rbi="" ground="" hr="" dp="" out="" />
+      <hsituation context="" ue="" ab="" rchfc="" r="" gdp="" h="" rbi="" ground="" hr="" dp="" out="" />
+      <hsituation spot="" context="" ue="" ab="" rchfc="" r="" gdp="" h="" rbi="" ground="" hr="" dp="" out="" />
+      <hsituation pos="" context="" ue="" ab="" rchfc="" r="" gdp="" h="" rbi="" ground="" hr="" dp="" out="" />
+      <hsituation context="" ue="" ab="" rchfc="" r="" h="" rbi="" ground="" hr="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ue="" ab="" rchfc="" r="" h="" rbi="" ground="" hr="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" bb="" so="" kl="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary rchfc="" advops="" leadoff="" w2outs="" wrunners="" />
+      <hsituation pos="" context="" bb="" ab="" kl="" rchfc="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" kl="" rchfc="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" rchfc="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" rchfc="" r="" h="" rbi="" out="" />
+      <hsituation spot="" context="" bb="" ab="" kl="" rchfc="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" bb="" ab="" kl="" r="" h="" rbi="" so="" out="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" bb="" gdp="" ground="" hitdp="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary ground="" rbi-2out="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" rbi3rd="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pos="" context="" bb="" ab="" r="" gdp="" double="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" bb="" ab="" r="" gdp="" double="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" ab="" r="" gdp="" double="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation spot="" context="" bb="" ab="" r="" gdp="" double="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" gdp="" double="" h="" rbi="" ground="" dp="" out="" />
+      <hsituation context="" bb="" ab="" r="" h="" rbi="" ground="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" hbp="" so="" gdp="" ground="" hitdp="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary ground="" lob="" advops="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation spot="" context="" ab="" r="" gdp="" hbp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" hbp="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" gdp="" hbp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" r="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation pos="" context="" ab="" r="" gdp="" hbp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" so="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" gdp="" h="" rbi="" ground="" so="" dp="" out="" />
+      <hsituation context="" ab="" r="" hbp="" h="" rbi="" so="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" double="" triple="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary rbi-2out="" advops="" leadoff="" w2outs="" wrunners="" />
+      <hsituation spot="" context="" ue="" ab="" r="" triple="" double="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ue="" ab="" r="" triple="" double="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" triple="" h="" rbi="" out="" />
+      <hsituation context="" ue="" ab="" r="" triple="" double="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" triple="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" triple="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" double="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" double="" h="" rbi="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" bb="" sh="" fly="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" sba="" />
+      <hsitsummary rcherr="" fly="" lob="" advops="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation spot="" context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pos="" context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <hsituation context="" bb="" ab="" r="" fly="" h="" rbi="" out="" />
+      <hsituation pitcher="" context="" bb="" ab="" r="" rcherr="" fly="" sh="" h="" rbi="" out="" />
+      <fsituation pos="" context="" a="" sba="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" sh="" ground="" fly="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary adv="" fly="" ground="" lob="" advops="" leadoff="" w2outs="" wrbiops="" wrunners="" />
+      <hsituation context="" ab="" r="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation spot="" context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation pos="" context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" h="" rbi="" out="" />
+      <hsituation context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" ground="" out="" />
+      <hsituation pitcher="" context="" ab="" r="" fly="" sh="" h="" rbi="" ground="" out="" />
+      <hsituation context="" ab="" r="" h="" rbi="" out="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" gs="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary />
+      <pitching appear="" ip="" gs="" ab="" bb="" bf="" double="" er="" fly="" ground="" h="" hbp="" hr="" kl="" r="" so="" pitches="" whip="" strikes="" />
+      <psitsummary fly="" ground="" picked="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" double="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" hbp="" h="" hr="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" hbp="" h="" hr="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" hr="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" double="" ip="" hbp="" h="" ground="" so="" er="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" sub="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" />
+      <hsitsummary />
+      <pitching appear="" ip="" ab="" bb="" bf="" double="" er="" fly="" ground="" h="" r="" sha="" so="" pitches="" whip="" strikes="" />
+      <psitsummary fly="" ground="" picked="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+      <fsituation pos="" context="" a="" e="" po="" />
+      <psituation context="" bb="" ab="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" double="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" r="" bf="" ip="" h="" so="" er="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" sub="" spot="" code="" bats="" throws="" class="" pos="" atpos="" playerId="">
+      <hitting r="" h="" ab="" rbi="" slg="" obp="" ops="" />
+      <fielding po="" a="" e="" sba="" />
+      <hsitsummary />
+      <pitching appear="" ip="" ab="" bf="" er="" fly="" ground="" h="" hbp="" kl="" r="" so="" pitches="" whip="" win="" strikes="" />
+      <psitsummary fly="" ground="" picked="" leadoff="" wrunners="" vsleft="" w2outs="" pitches="" strikes="" />
+      <fsituation pos="" context="" a="" sba="" e="" po="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" h="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+      <psituation inn="" context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" hbp="" h="" ground="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" bf="" ip="" hbp="" h="" so="" er="" />
+      <psituation context="" bb="" ab="" kl="" r="" fly="" bf="" ip="" h="" ground="" so="" er="" />
+    </player>
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+    <player name="" shortname="" uni="" gp="" pos="" spot="" code="" bats="" throws="" class="" />
+  </team>
+  <plays format="">
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" hbp="" />
+          <pitcher name="" bf="" hbp="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" por="" ab="" h="" hr="" scored="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" er="" r="" hr="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" double="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" />
+          <pitcher name="" bf="" ab="" h="" double="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" />
+          <pitcher name="" bf="" ab="" h="" double="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" rcherr="" sh="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" ue="" />
+          <pitcher name="" bf="" sha="" r="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" e="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" gndout="" sh="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" gndout="" sha="" />
+          <fielder pos="" name="" po="" a="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" rchfc="" gndout="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" gndout="" ip="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" a="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" double="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" dp="" gdp="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" gdp="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" indp="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <sub vh="" spot="" who="" for="" pos="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" gndout="" sh="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" gndout="" sha="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" a="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" por="" scored="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" por="" scored="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <pitcher name="" r="" er="" />
+          <pitcher name="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" double="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" rcherr="" ab="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" ue="" />
+          <pitcher name="" bf="" ab="" r="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" e="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" third="">
+          <batter name="" action="" out="" adv="" tobase="" por="" ab="" h="" hr="" scored="" ue="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" ue="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" ue="" />
+          <pitcher name="" bf="" ab="" h="" r="" hr="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" dp="" gdp="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" gdp="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" indp="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" />
+          <pitcher name="" bf="" ab="" h="" double="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" double="" />
+          <pitcher name="" bf="" ab="" h="" double="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <sub vh="" spot="" who="" for="" pos="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" dp="" gdp="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" gdp="" />
+          <pitches name="" order="" text="" b="" s="" />
+          <fielder pos="" name="" po="" indp="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" />
+          <pitcher name="" ip="" bf="" ab="" so="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" bb="" />
+          <pitcher name="" bf="" bb="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <sub vh="" spot="" who="" for="" pos="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <runner base="" name="" action="" out="" adv="" tobase="" sb="" />
+          <pitcher name="" sba="" />
+          <fielder pos="" name="" sba="" />
+          <fielder pos="" name="" sba="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" por="" scored="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <pitcher name="" r="" er="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" third="">
+          <batter name="" action="" out="" adv="" tobase="" hbp="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" hbp="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" second="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" hbp="" />
+          <pitcher name="" bf="" hbp="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" triple="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" triple="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" dp="" gdp="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" gdp="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" indp="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <fielder pos="" name="" po="" indp="" a="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+    <inning number="">
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" so="" kl="" />
+          <pitcher name="" ip="" bf="" ab="" so="" kl="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" gndout="" />
+          <pitcher name="" bf="" ip="" ab="" gndout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <fielder pos="" name="" po="" a="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" flyout="" />
+          <pitcher name="" bf="" ip="" ab="" flyout="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" po="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+      <batting vh="" id="">
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" />
+          <pitcher name="" bf="" ab="" h="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" rchfc="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <pitcher name="" bf="" ab="" />
+          <pitches name="" text="" b="" s="" />
+          <fielder pos="" name="" e="" />
+          <narrative text="" />
+        </play>
+        <play seq="" outs="" batter="" batprof="" pchprof="" pitcher="" first="" third="">
+          <batter name="" action="" out="" adv="" tobase="" ab="" h="" rbi="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" />
+          <runner base="" name="" action="" out="" adv="" tobase="" scored="" />
+          <pitcher name="" bf="" ab="" h="" r="" er="" />
+          <pitches name="" text="" b="" s="" />
+          <narrative text="" />
+        </play>
+        <innsummary r="" h="" e="" lob="" />
+      </batting>
+    </inning>
+  </plays>
+  <status complete="" />
+</bsgame>

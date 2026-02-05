@@ -44,17 +44,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B10000001C7E8A7D00000009 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				B10000001C7E8A7D00000002 /* yakker.sh */,
-				B10000001C7E8A7D00000004 /* yakker_stream.py */,
-				B10000001C7E8A7D00000006 /* requirements.txt */,
-				B10000001C7E8A7D00000008 /* livedata.xml.template */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		A10000001C7E8A7D0000000C /* YakkerStreamApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -84,6 +73,17 @@
 				A10000001C7E8A7D0000000C /* YakkerStreamApp */,
 				A10000001C7E8A7D0000000D /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		B10000001C7E8A7D00000009 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B10000001C7E8A7D00000002 /* yakker.sh */,
+				B10000001C7E8A7D00000004 /* yakker_stream.py */,
+				B10000001C7E8A7D00000006 /* requirements.txt */,
+				B10000001C7E8A7D00000008 /* livedata.xml.template */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,8 +290,9 @@
 		A10000001C7E8A7D00000017 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = YakkerStreamApp/YakkerStreamApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -318,8 +319,9 @@
 		A10000001C7E8A7D00000018 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = appicon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_ENTITLEMENTS = YakkerStreamApp/YakkerStreamApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
