@@ -134,17 +134,25 @@ The program currently implements smart data handling:
 - **Rolling Average**: Uses a 1-second rolling buffer to smooth noisy readings
 - **Stale Data**: Data older than 10 seconds is not displayed
 
-## Future Expansion Ideas
+## Version 1 Complete
 
-Potential metrics to add to the ProScoreboard display:
-1. Hit distance (`DistanceFeet`)
-2. Hang time (`HangTimeSeconds`)
-3. Spin efficiency (`SpinEfficiencyPercent`)
-4. Vertical break (`InducedVertBreakInches`)
-5. Horizontal break (`HorzBreakInches`)
-6. Hit spin rate (`HitSpinRateRPM`)
-7. Temperature and weather conditions
-8. Bearing/direction of hit
+The Version 1 implementation includes the following six metrics that are actively mapped to ProScoreboard:
+- Exit Velocity
+- Launch Angle
+- Hit Distance
+- Hang Time
+- Pitch Velocity
+- Spin Rate
+
+### Potential Future Enhancements
+
+The following additional metrics from the Yakker API could be considered for future versions:
+- Spin efficiency (`SpinEfficiencyPercent`)
+- Vertical break (`InducedVertBreakInches`)
+- Horizontal break (`HorzBreakInches`)
+- Hit spin rate (`HitSpinRateRPM`)
+- Temperature and weather conditions
+- Bearing/direction of hit
 
 ## Reference
 
