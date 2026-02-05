@@ -9,8 +9,6 @@ Display live YakkerTech baseball data on your ProScoreboard! This Mac app connec
 - **Captures live data** from YakkerTech sensors (exit velocity, launch angle, pitch velocity, spin rate, hit distance, hang time)
 - **Displays metrics** in a native Mac app and web browser
 - **Sends data to ProScoreboard** for professional video board integration
-- **Averages duplicate readings** for accuracy
-- **Smooths out noisy data** with 1-second rolling averages
 - **Configurable HTTP port** for flexible network setups
 - **Secure credential storage** using macOS Keychain
 
@@ -95,12 +93,12 @@ The program maps Yakker sensor data to ProScoreboard's baseball XML format:
 
 | Yakker Metric | ProScoreboard Field | XML Field |
 |---------------|---------------------|-----------|
-| Exit Velocity (mph) | Hits | `<hitting h="">` |
-| Launch Angle (degrees) | RBI | `<hitting rbi="">` |
-| Hit Distance (feet) | Doubles | `<hitting double="">` |
-| Hang Time (seconds) | Triples | `<hitting triple="">` |
-| Pitch Velocity (mph) | Earned Runs | `<pitching er="">` |
-| Spin Rate (rpm) | Pitches | `<pitching pitches="">` |
+| Exit Velocity (mph) | Visitor Hits | `<hitting h="">` |
+| Launch Angle (degrees) | Visitor RBI | `<hitting rbi="">` |
+| Hit Distance (feet) | Visitor Doubles | `<hitting double="">` |
+| Hang Time (seconds) | Visitor Triples | `<hitting triple="">` |
+| Pitch Velocity (mph) | Visitor Earned Runs | `<pitching er="">` |
+| Spin Rate (rpm) | Visitor Pitches | `<pitching pitches="">` |
 
 ### Why These Fields?
 
