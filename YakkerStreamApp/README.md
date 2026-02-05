@@ -1,16 +1,20 @@
 # Yakker Stream macOS App
 
+> **Version 1.0** - Feature complete release
+
 A native macOS application for controlling and monitoring the Yakker Stream backend.
 
 ## Features
 
 - **User-Configurable Credentials**: Enter your own Yakker domain and authorization key
 - **Built-in Help**: Step-by-step guide to obtain your credentials
+- **Configurable HTTP Port**: Change the default port (8000) as needed
+- **Secure Storage**: Authorization key stored in macOS Keychain
 - **Connection Status Indicator**: Real-time visual feedback on connection status
-  - ⚾️ ✓ - Connected and running
-  - ⚾️ ... - Connecting
-  - ⚾️ ✗ - Disconnected
-  - ⚾️ ⚠️ - Error
+  - ● Green - Connected and running
+  - ● Yellow - Connecting
+  - ● Gray - Disconnected
+  - ● Red - Error
 - **Start/Stop Control**: Easy button to start and stop the stream
 - **Live Metrics Display**: View real-time baseball metrics:
   - Exit Velocity (mph)
@@ -19,6 +23,8 @@ A native macOS application for controlling and monitoring the Yakker Stream back
   - Spin Rate (rpm)
   - Hit Distance (ft)
   - Hang Time (sec)
+- **Live Terminal Output**: View backend logs in real-time
+- **Copy URL Button**: Quickly copy the data stream URL to clipboard
 - **Web Interface Link**: Quick access to the browser interface
 
 ## Requirements

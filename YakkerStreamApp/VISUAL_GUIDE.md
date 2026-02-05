@@ -1,5 +1,7 @@
 # Yakker Stream App - Visual Guide
 
+> **Version 1.0** - Feature complete release
+
 ## Application Window
 
 ```
@@ -9,7 +11,7 @@
 │                                          │
 ├──────────────────────────────────────────┤
 │                                          │
-│  Settings    [? How to Get Credentials]  │
+│  ▶ Configuration [? How to Get Creds]    │
 │                                          │
 │  Yakker Domain:                          │
 │  ┌────────────────────────────────────┐  │
@@ -20,6 +22,11 @@
 │  ┌────────────────────────────────────┐  │
 │  │ Basic YOUR_AUTH_KEY_HERE           │  │
 │  └────────────────────────────────────┘  │
+│                                          │
+│  HTTP Port:                              │
+│  ┌──────────┐ (Default: 8000)            │
+│  │ 8000     │                            │
+│  └──────────┘                            │
 │                                          │
 ├──────────────────────────────────────────┤
 │                                          │
@@ -34,20 +41,18 @@
 │                                          │
 ├──────────────────────────────────────────┤
 │                                          │
-│  Live Metrics                            │
-│                                          │
-│  Exit Velocity     87.9  mph             │
-│  Launch Angle      30.3  °               │
-│  Pitch Velocity    44.7  mph             │
-│  Spin Rate         1031  rpm             │
-│  Hit Distance      287   ft              │
-│  Hang Time         3.6   sec             │
+│  Live Output                  Waiting... │
+│  ┌────────────────────────────────────┐  │
+│  │ [info] Starting Yakker Stream...   │  │
+│  │ [info] Connected to Yakker         │  │
+│  │ Exit: 87.9 | Angle: 30.3           │  │
+│  │ Pitch: 44.7 | Spin: 1031           │  │
+│  └────────────────────────────────────┘  │
 │                                          │
 ├──────────────────────────────────────────┤
 │                                          │
-│          Web Interface                   │
-│       http://localhost:8000              │
-│         (clickable link)                 │
+│          Data Stream URL                 │
+│       [Copy URL to Clipboard]            │
 │                                          │
 │              Quit                        │
 │                                          │
@@ -60,24 +65,25 @@
 ```
 Status: ● Disconnected (gray dot)
 Button: [▶️ Start Stream] (green)
-Settings: Editable
-Metrics: "Start the stream to view metrics"
+Configuration: Editable
+Live Output: "Idle"
 ```
 
 ### 2. Connecting
 ```
 Status: ● Connecting... (yellow dot)
-Button: [🛑 Stop Stream] (red, disabled)
-Settings: Locked (disabled)
-Metrics: "Start the stream to view metrics"
+Button: [🛑 Stop Stream] (red)
+Configuration: Locked (disabled)
+Live Output: Backend startup logs
 ```
 
 ### 3. Connected
 ```
 Status: ● Connected (green dot)
 Button: [🛑 Stop Stream] (red, active)
-Settings: Locked (disabled)
-Metrics: Live values updating every second
+Configuration: Locked (disabled), auto-collapsed
+Live Output: Real-time metric data
+Copy URL: Button visible
 ```
 
 ### 4. Error
@@ -85,33 +91,26 @@ Metrics: Live values updating every second
 Status: ● Error (red dot)
 Error: "Please configure your Yakker domain and authorization key"
 Button: [▶️ Start Stream] (green)
-Settings: Editable
-Metrics: "--" for all values
+Configuration: Editable, auto-expanded
+Live Output: Error details
 ```
-
-## User Flow Diagram
-
-```
-Launch App
-    │
-    ▼
 
 ## Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                   Menu Bar App                      │
+│               YakkerStream macOS App                │
 │                  (Swift/SwiftUI)                    │
 │                                                     │
 │  ┌──────────────┐      ┌──────────────────────┐   │
-│  │  AppDelegate │──────│ YakkerStreamManager  │   │
-│  │  (Menu Bar)  │      │   (Process Control)  │   │
+│  │YakkerStream- │──────│ YakkerStreamManager  │   │
+│  │ AppApp.swift │      │   (Process Control)  │   │
 │  └──────────────┘      └──────────┬───────────┘   │
 │         │                          │               │
 │         │                          │               │
 │  ┌──────▼──────┐                  │               │
 │  │ ContentView │                  │               │
-│  │   (UI)      │◄─────────────────┘               │
+│  │ (Main UI)   │◄─────────────────┘               │
 │  └─────────────┘                                   │
 └─────────────────┬───────────────────┬──────────────┘
                   │                   │
@@ -125,7 +124,7 @@ Launch App
          │                                 │
          │  ┌──────────┐  ┌────────────┐  │
          │  │ WebSocket│  │ HTTP Server│  │
-         │  │ to Yakker│  │ :8000      │  │
+         │  │ to Yakker│  │ (port cfg) │  │
          │  └──────────┘  └────────────┘  │
          │                                 │
          │  Endpoints:                     │
@@ -152,26 +151,25 @@ Python Backend (yakker_stream.py)
        ├─────────────┬─────────────┐
        ▼             ▼             ▼
     Browser    ProScoreboard   SwiftUI App
-     :8000      livedata.xml    data.xml
+    (port cfg)  livedata.xml   livedata.xml
    (HTML view)   (XML feed)    (polling)
                                    │
                                    ▼
-                            Menu Bar Popover
-                            (Live Metrics UI)
+                            App Window
+                         (Live Terminal UI)
 ```
 
 ## File Structure
 
 ```
-yakker-stream/
-├── yakker.sh              ← Launch script (used by app)
-├── yakker_stream.py       ← Python backend
-├── requirements.txt       ← Python dependencies
+yakkerstream-app/
 ├── README.md             ← Main documentation
+├── YAKKER_METRICS.md     ← Metrics reference
 │
-└── YakkerStreamApp/      ← SwiftUI Menu Bar App
+└── YakkerStreamApp/      ← SwiftUI macOS App
     ├── README.md         ← App-specific docs
-    ├── UI_OVERVIEW.md    ← This file
+    ├── UI_OVERVIEW.md    ← UI documentation
+    ├── VISUAL_GUIDE.md   ← This file
     ├── build.sh          ← Build script
     ├── check-system.sh   ← System requirements checker
     │
@@ -179,72 +177,33 @@ yakker-stream/
     │   └── project.pbxproj
     │
     └── YakkerStreamApp/  ← Source code
-        ├── YakkerStreamAppApp.swift    ← Main app + menu bar
-        ├── ContentView.swift            ← UI popover
-        ├── YakkerStreamManager.swift    ← Backend controller
-        ├── Info.plist                   ← App config
+        ├── YakkerStreamAppApp.swift    ← Main app entry
+        ├── ContentView.swift           ← Main UI window
+        ├── YakkerStreamManager.swift   ← Backend controller
+        ├── Info.plist                  ← App config
         ├── YakkerStreamApp.entitlements ← Permissions
-        └── Assets.xcassets/             ← Icons
+        ├── Assets.xcassets/            ← Icons
+        └── Resources/                  ← Bundled backend files
+            ├── yakker.sh
+            ├── yakker_stream.py
+            ├── requirements.txt
+            └── livedata.xml.template
 ```
 
-## Key Features Checklist
+## Version 1.0 Features Checklist
 
-- [✓] Menu bar app (no dock icon)
-- [✓] Connection status indicator (⚾️ with symbols)
+- [✓] Native macOS app window
+- [✓] Connection status indicator (colored dots)
 - [✓] Start/Stop button for stream control
-- [✓] Live metrics display (6 metrics)
-- [✓] Auto-updating metrics (1-second poll)
-- [✓] Error handling and display
+- [✓] Six metrics: Exit Velocity, Launch Angle, Hit Distance, Hang Time, Pitch Velocity, Spin Rate
+- [✓] Live terminal output display
+- [✓] Auto-scrolling log view
+- [✓] Collapsible configuration section
+- [✓] Configurable HTTP port
+- [✓] Secure credential storage (Keychain)
+- [✓] Copy URL to clipboard button
+- [✓] Error handling and display with help link
 - [✓] Process monitoring
-- [✓] Web interface quick link
 - [✓] Clean shutdown on quit
-- [✓] Transient popover (auto-dismiss)
-App window opens
-    │
-    ▼
-Settings empty (first run)
-    │
-    ▼
-Click "How to Get Credentials"
-    │
-    ▼
-Read instructions
-    │
-    ▼
-Enter domain and auth key
-    │
-    ▼
-Click "Start Stream"
-    │
-    ├─────────────────────────┐
-    │                         │
-    ▼                         ▼
-Status: Connecting...    Backend launches
-Settings: Locked         with custom credentials
-    │                         │
-    └─────────────────────────┘
-                  │
-                  ▼
-         ✓ Connected!
-                  │
-                  ▼
-    ┌─────────────────────────┐
-    │  Metrics auto-update    │
-    │  Every 1 second via     │
-    │  HTTP poll to backend   │
-    └─────────────────────────┘
-                  │
-                  ▼
-          Click "Stop Stream"
-                  │
-                  ▼
-          Backend terminates
-          Status: Disconnected
-          Settings: Unlocked
-                  │
-                  ▼
-            Click "Quit"
-                  │
-                  ▼
-         App terminates
-```
+- [✓] Domain validation
+- [✓] Shell argument escaping for security

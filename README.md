@@ -1,5 +1,7 @@
 # Yakker Stream - Live Baseball Stats Display
 
+> **Version 1.0** - Feature complete release
+
 Display live YakkerTech baseball data on your ProScoreboard! This Mac app connects to YakkerTech sensors and sends real-time pitch and hit data to ProPresenter's ProScoreboard for video board display.
 
 ## What This Does
@@ -9,6 +11,8 @@ Display live YakkerTech baseball data on your ProScoreboard! This Mac app connec
 - **Sends data to ProScoreboard** for professional video board integration
 - **Averages duplicate readings** for accuracy
 - **Smooths out noisy data** with 1-second rolling averages
+- **Configurable HTTP port** for flexible network setups
+- **Secure credential storage** using macOS Keychain
 
 ## System Requirements
 
@@ -68,10 +72,10 @@ Replace `/path/to/` with the actual location of the app.
 
 | Icon | Meaning |
 |------|---------|
-| ⚾️ ✓ | Connected and running |
-| ⚾️ ... | Connecting |
-| ⚾️ ✗ | Disconnected |
-| ⚾️ ⚠️ | Error |
+| ● Green | Connected and running |
+| ● Yellow | Connecting |
+| ● Gray | Disconnected |
+| ● Red | Error |
 
 ## Connecting to ProScoreboard
 
@@ -104,11 +108,15 @@ ProScoreboard expects baseball stats in specific XML fields. Since we're showing
 
 ## URLs
 
+The following URLs are available when the stream is running (default port 8000, configurable in app settings):
+
 | Purpose | URL |
 |---------|-----|
 | View live data in browser | http://localhost:8000 |
 | ProScoreboard Data Link | http://localhost:8000/livedata.xml |
 | Simple XML feed | http://localhost:8000/data.xml |
+
+> **Note:** If you change the HTTP port in the app settings, replace 8000 with your configured port number.
 
 ## Troubleshooting
 
@@ -144,7 +152,11 @@ If Python isn't installed, download it from: https://www.python.org/downloads/ma
 
 ### Port Already in Use
 
-If another application is using port 8000, you'll need to stop that application first or modify the port in the source code.
+If another application is using the default port (8000), you can either:
+- Change the HTTP port in the app's Configuration settings
+- Stop the other application using that port
+
+The app will automatically attempt to free the port when starting, but if it cannot, try specifying a different port.
 
 ## Building from Source
 
@@ -158,8 +170,18 @@ See [YakkerStreamApp/README.md](YakkerStreamApp/README.md) for detailed developm
 
 ## Additional Resources
 
-- **YAKKER_METRICS.md** - Complete reference of all available Yakker data points
-- **Yakker-Stream-How-To.pdf** - Visual guide for setup
+- **YAKKER_METRICS.md** - Complete reference of all available Yakker data points and the six metrics mapped in Version 1
+- **Yakker-Stream-How-To.pdf** - Visual guide for setup (if available)
+
+## Version History
+
+### Version 1.0
+- Six core metrics: Exit Velocity, Launch Angle, Hit Distance, Hang Time, Pitch Velocity, Spin Rate
+- Native macOS app with SwiftUI interface
+- Configurable HTTP port
+- Secure credential storage in macOS Keychain
+- Live terminal output display
+- Copy URL to clipboard feature
 
 ## License
 
