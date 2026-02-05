@@ -112,7 +112,8 @@ async def _dispatch_payload_hooks(
             if inspect.isawaitable(result):
                 await result
         except Exception as exc:
-            logging.debug("Payload hook failed: %s", exc)
+            # Silently ignore payload hook failures
+            pass
 
 
 class MetricAggregator:
@@ -353,7 +354,7 @@ async def process_payload(
             f"- Exit Velo: {exit_display} mph\n"
             f"- Launch: {launch_display}°\n"
             f"- Distance: {distance_display} ft\n"
-            f"- I'Hangtime: {hangtime_display} s\n"
+            f"- Hangtime: {hangtime_display} s\n"
         )
         print(event_output, file=sys.stderr, flush=True)
     return summary
@@ -386,11 +387,12 @@ class YakkerStreamer:
             while True:
                 try:
                     self.status["connection"] = "connecting"
+                    print("⚙️  Connecting to Yakker data feed...", file=sys.stderr, flush=True)
                     async with session.ws_connect(
                         self.ws_url, headers=headers, heartbeat=30
                     ) as websocket:
                         self.status["connection"] = "connected"
-                        logging.info("Connected to YakkerTech websocket")
+                        print("✅ Connected to YakkerTech websocket", file=sys.stderr, flush=True)
                         async for message in websocket:
                             if message.type == WSMsgType.TEXT:
                                 try:
@@ -404,20 +406,20 @@ class YakkerStreamer:
                                         echo_console=self.echo_console,
                                     )
                                 except json.JSONDecodeError as exc:
-                                    logging.warning("Bad payload: %s", exc)
+                                    print(f"⚠️  Bad payload: {exc}", file=sys.stderr, flush=True)
                             elif message.type == WSMsgType.ERROR:
-                                logging.error("Websocket error: %s", message.data)
+                                print(f"❌ Websocket error: {message.data}", file=sys.stderr, flush=True)
                                 break
                             elif message.type == WSMsgType.CLOSED:
                                 break
                 except ClientConnectorError as exc:
                     self.status["connection"] = "disconnected"
-                    logging.warning("Cannot connect to YakkerTech websocket: %s", exc)
+                    print(f"⚠️  Cannot connect to YakkerTech websocket: {exc}", file=sys.stderr, flush=True)
                     await asyncio.sleep(3)
                     continue
                 except Exception as exc:
                     self.status["connection"] = "disconnected"
-                    logging.warning("Websocket interrupted: %s", exc)
+                    print(f"⚠️  Websocket interrupted: {exc}", file=sys.stderr, flush=True)
                     await asyncio.sleep(3)
                     continue
 
@@ -462,7 +464,7 @@ async def periodic_updater(aggregator: MetricAggregator) -> None:
             # This triggers cleanup of old samples
             await aggregator.get_rolling_summary()
         except Exception as exc:
-            logging.warning("Error in periodic updater: %s", exc)
+            print(f"⚠️  Error in periodic updater: {exc}", file=sys.stderr, flush=True)
 
 
 async def update_livedata_xml(aggregator: MetricAggregator) -> None:
@@ -474,13 +476,13 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
     
     # Read template once at startup
     if not os.path.exists(template_path):
-        logging.error("Template file not found: %s", template_path)
+        print(f"❌ Template file not found: {template_path}", file=sys.stderr, flush=True)
         return
     
     with open(template_path, 'r', encoding='utf-8') as f:
         template_content = f.read()
     
-    logging.info("Loaded livedata.xml template")
+    print("✅ Loaded livedata.xml template", file=sys.stderr, flush=True)
     
     while True:
         await asyncio.sleep(1.0)  # Update every second
@@ -512,12 +514,10 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
             with open(livedata_path, 'w', encoding='utf-8') as f:
                 f.write(xml_content)
                 
-            logging.debug(
-                "Updated livedata.xml | Exit Velo: %s | Launch Angle: %s | Spin Rate: %s | Pitch Velo: %s | Distance: %s | Hangtime: %s",
-                exit_velo, launch_angle, spin_rate, pitch_velo, hit_distance, hangtime
-            )
+            # Silently update - no need to log every update
+            pass
         except Exception as exc:
-            logging.warning("Error updating livedata.xml: %s", exc)
+            print(f"⚠️  Error updating livedata.xml: {exc}", file=sys.stderr, flush=True)
 
 
 def _format_metric(
@@ -721,14 +721,15 @@ async def _run_server(app: web.Application, port: int) -> web.AppRunner:
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
-    logging.info("ProScoreboard XML API available at http://localhost:%s", port)
+    print(f"✅ ProScoreboard XML API available at http://localhost:{port}", file=sys.stderr, flush=True)
     return runner
 
 
 async def main() -> None:
     args = parse_args()
+    # Set logging to WARNING level to suppress INFO messages
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.WARNING,
         format="%(asctime)s [%(levelname)s] %(message)s",
         datefmt="%H:%M:%S",
     )
@@ -788,7 +789,7 @@ async def main() -> None:
     except asyncio.CancelledError:
         pass
     await runner.cleanup()
-    logging.info("Yakker stream shut down.")
+    print("✅ Yakker stream shut down.", file=sys.stderr, flush=True)
 
 
 if __name__ == "__main__":

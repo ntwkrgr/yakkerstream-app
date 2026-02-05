@@ -528,8 +528,8 @@ class YakkerStreamManager: ObservableObject {
             .filter { !$0.isEmpty }
         guard !lines.isEmpty else { return }
         for line in lines {
-            let prefix = isError ? "⚠︎ " : ""
-            terminalLines.append(prefix + line)
+            // Don't add prefix - just display the output as-is
+            terminalLines.append(line)
         }
         if terminalLines.count > Self.maxTerminalLines {
             terminalLines.removeFirst(terminalLines.count - Self.maxTerminalLines)
