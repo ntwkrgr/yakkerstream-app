@@ -125,7 +125,7 @@ class MetricAggregator:
         "hit_distance_ft",
         "hangtime_sec",
     )
-    STALE_TIMEOUT_SECONDS = 10
+    STALE_TIMEOUT_SECONDS = 30
     ROLLING_WINDOW_SECONDS = 1.0
 
     class MetricEntry(TypedDict):
@@ -521,7 +521,7 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
 
 
 def _format_metric(
-    value: Optional[float], decimals: int, empty_placeholder: str = "-- "
+    value: Optional[float], decimals: int, empty_placeholder: str = "--- "
 ) -> str:
     """Format a metric value for ProScoreboard, showing placeholder for 0 or None."""
     if value is None or value == 0:
