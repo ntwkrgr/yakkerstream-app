@@ -37,9 +37,8 @@ PITCH_METRIC_KEYS = PITCH_VELOCITY_KEYS + (SPIN_RATE_KEY,)
 # Yakker merges pitch + hit observations; catcher throwbacks surface as a single contributing event,
 # so require at least two event IDs (pitch + hit) when no pitch metrics accompany hit data.
 MIN_CONTRIBUTING_EVENTS_FOR_HIT = 2
-THROWBACK_MAX_EXIT_VELO = 60.0
-THROWBACK_MIN_ANGLE_DEG = 10.0
-THROWBACK_MAX_ANGLE_DEG = 20.0
+# Filter throwbacks based on low exit velocity (soft throws back to pitcher/catcher)
+THROWBACK_MAX_EXIT_VELO = 65.0
 
 PayloadHook = Callable[[dict], Union[Awaitable[None], None]]
 
@@ -69,15 +68,12 @@ def _is_valid(value: Optional[float]) -> bool:
 def _looks_like_throwback(hit_data: dict) -> bool:
     """Return True when the hit profile matches a soft throwback to the mound."""
     exit_velocity = hit_data.get("ExitSpeedMPH")
-    launch_angle = hit_data.get("AngleDegrees")
-    if not (_is_valid(exit_velocity) and _is_valid(launch_angle)):
+    if not _is_valid(exit_velocity):
         return False
     exit_velocity = float(exit_velocity)
-    launch_angle = float(launch_angle)
-    return (
-        exit_velocity < THROWBACK_MAX_EXIT_VELO
-        and THROWBACK_MIN_ANGLE_DEG <= launch_angle <= THROWBACK_MAX_ANGLE_DEG
-    )
+    # Filter throwbacks based solely on low exit velocity
+    # Throwbacks are characterized by low exit velocity regardless of angle
+    return exit_velocity < THROWBACK_MAX_EXIT_VELO
 
 
 def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str]) -> bool:
@@ -125,7 +121,7 @@ class MetricAggregator:
         "hit_distance_ft",
         "hangtime_sec",
     )
-    STALE_TIMEOUT_SECONDS = 30
+    STALE_TIMEOUT_SECONDS = 10
     ROLLING_WINDOW_SECONDS = 1.0
 
     class MetricEntry(TypedDict):
@@ -521,7 +517,7 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
 
 
 def _format_metric(
-    value: Optional[float], decimals: int, empty_placeholder: str = "--- "
+    value: Optional[float], decimals: int, empty_placeholder: str = "-- "
 ) -> str:
     """Format a metric value for ProScoreboard, showing placeholder for 0 or None."""
     if value is None or value == 0:
