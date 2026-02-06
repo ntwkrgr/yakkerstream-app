@@ -37,7 +37,7 @@ PITCH_METRIC_KEYS = PITCH_VELOCITY_KEYS + (SPIN_RATE_KEY,)
 # Yakker merges pitch + hit observations; catcher throwbacks surface as a single contributing event,
 # so require at least two event IDs (pitch + hit) when no pitch metrics accompany hit data.
 MIN_CONTRIBUTING_EVENTS_FOR_HIT = 2
-THROWBACK_MAX_EXIT_VELO = 60.0
+THROWBACK_MAX_EXIT_VELO = 65.0
 THROWBACK_MIN_ANGLE_DEG = 10.0
 THROWBACK_MAX_ANGLE_DEG = 20.0
 
