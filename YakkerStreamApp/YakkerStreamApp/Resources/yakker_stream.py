@@ -67,9 +67,9 @@ def _is_valid(value: Optional[float]) -> bool:
     return True
 
 
-def _looks_like_throwback(hit_data: dict, max_exit_velo: Optional[float] = None) -> bool:
+def _looks_like_throwback(hit_data: dict, min_exit_velo: Optional[float] = None) -> bool:
     """Return True when the hit profile matches a soft throwback to the mound."""
-    if max_exit_velo is None:
+    if min_exit_velo is None:
         return False
     exit_velocity = hit_data.get("ExitSpeedMPH")
     if not _is_valid(exit_velocity):
@@ -77,17 +77,17 @@ def _looks_like_throwback(hit_data: dict, max_exit_velo: Optional[float] = None)
     exit_velocity = float(exit_velocity)
     # Filter throwbacks based solely on low exit velocity
     # Throwbacks are characterized by low exit velocity regardless of angle
-    return exit_velocity < max_exit_velo
+    return exit_velocity < min_exit_velo
 
 
-def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str], max_exit_velo: Optional[float] = None) -> bool:
+def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str], min_exit_velo: Optional[float] = None) -> bool:
     """
     Treat hits as valid when they include trustworthy bat metrics, while filtering out
     short throwbacks that Yakker reports as hit-only events.
     """
     if not hit_data:
         return False
-    if _looks_like_throwback(hit_data, max_exit_velo=max_exit_velo):
+    if _looks_like_throwback(hit_data, min_exit_velo=min_exit_velo):
         return False
 
     if _is_valid(hit_data.get("ExitSpeedMPH")):
@@ -311,7 +311,7 @@ async def process_payload(
     aggregator: MetricAggregator,
     *,
     echo_console: bool = True,
-    max_exit_velo: Optional[float] = None,
+    min_exit_velo: Optional[float] = None,
 ) -> Optional[Dict[str, Optional[float]]]:
     event_id = payload.get("event_uuid") or payload.get("eventId")
     pitch_data = payload.get("pitch_data") or {}
@@ -321,7 +321,7 @@ async def process_payload(
     pitch_velocity = pitch_data.get(ZONE_SPEED_KEY) or pitch_data.get(REL_SPEED_KEY)
     spin_rate = pitch_data.get(SPIN_RATE_KEY)
 
-    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events, max_exit_velo=max_exit_velo)
+    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events, min_exit_velo=min_exit_velo)
     exit_velocity = hit_data.get("ExitSpeedMPH") if include_hit else None
     launch_angle = hit_data.get("AngleDegrees") if include_hit else None
     hit_distance = hit_data.get("DistanceFeet") if include_hit else None
@@ -371,7 +371,7 @@ class YakkerStreamer:
         *,
         echo_console: bool = True,
         payload_hooks: Optional[List[PayloadHook]] = None,
-        max_exit_velo: Optional[float] = None,
+        min_exit_velo: Optional[float] = None,
     ) -> None:
         self.ws_url = ws_url
         self.auth_value = auth_value
@@ -379,7 +379,7 @@ class YakkerStreamer:
         self.echo_console = echo_console
         self.status = status
         self.payload_hooks = payload_hooks or []
-        self.max_exit_velo = max_exit_velo
+        self.min_exit_velo = min_exit_velo
 
     async def run(self) -> None:
         headers = {}
@@ -407,7 +407,7 @@ class YakkerStreamer:
                                         payload,
                                         self.aggregator,
                                         echo_console=self.echo_console,
-                                        max_exit_velo=self.max_exit_velo,
+                                        min_exit_velo=self.min_exit_velo,
                                     )
                                 except json.JSONDecodeError as exc:
                                     print(f"⚠️  Bad payload: {exc}", file=sys.stderr, flush=True)
@@ -434,7 +434,7 @@ async def demo_feed(
     *,
     echo_console: bool = True,
     payload_hooks: Optional[List[PayloadHook]] = None,
-    max_exit_velo: Optional[float] = None,
+    min_exit_velo: Optional[float] = None,
 ) -> None:
     status["connection"] = "demo"
     samples = [
@@ -457,7 +457,7 @@ async def demo_feed(
     while True:
         for sample in samples:
             await _dispatch_payload_hooks(payload_hooks, sample)
-            await process_payload(sample, aggregator, echo_console=echo_console, max_exit_velo=max_exit_velo)
+            await process_payload(sample, aggregator, echo_console=echo_console, min_exit_velo=min_exit_velo)
             await asyncio.sleep(POLL_INTERVAL_SECONDS)
 
 
@@ -776,7 +776,7 @@ async def main() -> None:
 
     if args.demo:
         feed_task = asyncio.create_task(
-            demo_feed(aggregator, status, echo_console=not args.no_console, max_exit_velo=args.min_exit_velo)
+            demo_feed(aggregator, status, echo_console=not args.no_console, min_exit_velo=args.min_exit_velo)
         )
     else:
         feed_task = asyncio.create_task(
@@ -786,7 +786,7 @@ async def main() -> None:
                 aggregator=aggregator,
                 status=status,
                 echo_console=not args.no_console,
-                max_exit_velo=args.min_exit_velo,
+                min_exit_velo=args.min_exit_velo,
             ).run()
         )
 

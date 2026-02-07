@@ -161,8 +161,8 @@ struct ContentView: View {
             }
         }
         .onChange(of: manager.connectionStatus) { status in
-            // Open settings when connection fails
-            if status == .error {
+            // Open settings when connection fails (only if not already showing)
+            if status == .error && !showingSettings {
                 showingSettings = true
             }
         }
