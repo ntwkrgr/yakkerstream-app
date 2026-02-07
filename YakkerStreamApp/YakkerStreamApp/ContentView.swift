@@ -120,7 +120,7 @@ struct ContentView: View {
                     }) {
                         HStack(spacing: 6) {
                             Image(systemName: showCopiedFeedback ? "checkmark.circle.fill" : "doc.on.doc")
-                            Text(showCopiedFeedback ? "Copied!" : "Copy URL to Clipboard")
+                            Text(showCopiedFeedback ? "Copied!" : manager.backendBaseURL + "/livedata.xml")
                         }
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
