@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
     @State private var showingHelp = false
-    @State private var settingsExpanded = false
+    @State private var showingSettings = false
     @State private var hasInitialized = false
     @State private var showCopiedFeedback = false
     
@@ -21,83 +21,17 @@ struct ContentView: View {
                 Text("Yakker Stream")
                     .font(.title2)
                     .bold()
-            }
-            .padding(.top)
-            
-            Divider()
-            
-            // Settings Section
-            VStack(alignment: .leading, spacing: 0) {
+                Spacer()
                 Button(action: {
-                    settingsExpanded.toggle()
+                    showingSettings = true
                 }) {
-                    HStack {
-                        Image(systemName: settingsExpanded ? "chevron.down" : "chevron.right")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                        Text("Configuration")
-                            .font(.headline)
-                            .foregroundColor(.primary)
-                        Spacer()
-                    }
-                    .contentShape(Rectangle())
+                    Image(systemName: "gearshape")
+                        .font(.title2)
                 }
                 .buttonStyle(PlainButtonStyle())
-                
-                if settingsExpanded {
-                    VStack(spacing: 12) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Yakker Domain:")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextField("yourdomain.yakkertech.com", text: $manager.yakkerDomain)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .disabled(manager.isRunning)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Authorization Key:")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            TextField("Basic YOUR_AUTH_KEY_HERE", text: $manager.authKey)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                                .disabled(manager.isRunning)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("HTTP Port:")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            HStack {
-                                TextField("8000", value: $manager.httpPort, format: .number.grouping(.never))
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .disabled(manager.isRunning)
-                                    .frame(width: 100)
-                                Text("(Default: 8000)")
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                            }
-                        }
-                        
-                        // Help button moved inside
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                showingHelp = true
-                            }) {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "questionmark.circle")
-                                    Text("How to Get Credentials")
-                                }
-                                .font(.caption)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding(.top, 8)
-                }
+                .help("Settings")
             }
+            .padding(.top)
             .padding(.horizontal)
             
             Divider()
@@ -211,24 +145,25 @@ struct ContentView: View {
             .padding(.bottom)
         }
         .frame(minWidth: Self.windowWidth, minHeight: Self.windowHeight)
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
+        }
         .sheet(isPresented: $showingHelp) {
             HelpView()
         }
         .onAppear {
-            // Set initial settings expansion state based on saved credentials
-            // Only do this once on first appearance
+            // Auto-open settings if credentials are not configured
             if !hasInitialized {
-                settingsExpanded = !manager.hasSavedCredentials()
+                if !manager.hasSavedCredentials() {
+                    showingSettings = true
+                }
                 hasInitialized = true
             }
         }
         .onChange(of: manager.connectionStatus) { status in
-            // Expand settings when connection fails, collapse when connected
+            // Open settings when connection fails
             if status == .error {
-                settingsExpanded = true
-            } else if status == .connected {
-                // Collapse settings once successfully connected
-                settingsExpanded = false
+                showingSettings = true
             }
         }
     }
@@ -329,6 +264,146 @@ private struct TerminalLogView: View {
                     proxy.scrollTo(last, anchor: .bottom)
                 }
             }
+        }
+    }
+}
+
+// Settings view displayed in its own window/sheet
+struct SettingsView: View {
+    @ObservedObject var manager = YakkerStreamManager.shared
+    @State private var showingHelp = false
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Settings")
+                    .font(.title2)
+                    .bold()
+                Spacer()
+                Button("Done") {
+                    dismiss()
+                }
+            }
+            .padding()
+            
+            Divider()
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Connection Settings
+                    GroupBox(label: Label("Connection", systemImage: "network")) {
+                        VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Yakker Domain:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                TextField("yourdomain.yakkertech.com", text: $manager.yakkerDomain)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .disabled(manager.isRunning)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Authorization Key:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                TextField("Basic YOUR_AUTH_KEY_HERE", text: $manager.authKey)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .disabled(manager.isRunning)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("HTTP Port:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    TextField("8000", value: $manager.httpPort, format: .number.grouping(.never))
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .disabled(manager.isRunning)
+                                        .frame(width: 100)
+                                    Text("(Default: \(YakkerStreamManager.defaultBackendPort))")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                }
+                            }
+                            
+                            HStack {
+                                Spacer()
+                                Button(action: {
+                                    showingHelp = true
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "questionmark.circle")
+                                        Text("How to Get Credentials")
+                                    }
+                                    .font(.caption)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
+                        .padding(.top, 8)
+                    }
+                    
+                    // Metric Settings
+                    GroupBox(label: Label("Metrics", systemImage: "gauge")) {
+                        VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Stale Timeout (seconds):")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                HStack {
+                                    TextField("10", value: $manager.staleTimeout, format: .number)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .disabled(manager.isRunning)
+                                        .frame(width: 100)
+                                    Text("(Default: \(YakkerStreamManager.defaultStaleTimeout))")
+                                        .font(.caption2)
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                }
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Toggle(isOn: $manager.minimumExitVeloEnabled) {
+                                    Text("Enable Minimum Exit Velocity Filter")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .disabled(manager.isRunning)
+                                
+                                if manager.minimumExitVeloEnabled {
+                                    HStack {
+                                        Text("Minimum Exit Velo (mph):")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        TextField("65.0", value: $manager.minimumExitVelo, format: .number)
+                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                            .disabled(manager.isRunning)
+                                            .frame(width: 100)
+                                        Text("(Default: \(String(format: "%.1f", YakkerStreamManager.defaultMinimumExitVelocity)))")
+                                            .font(.caption2)
+                                            .foregroundColor(.secondary)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.top, 8)
+                    }
+                    
+                    if manager.isRunning {
+                        Text("Some settings are disabled while the stream is running.")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+                .padding()
+            }
+        }
+        .frame(minWidth: 480, minHeight: 420)
+        .sheet(isPresented: $showingHelp) {
+            HelpView()
         }
     }
 }

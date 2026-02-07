@@ -29,6 +29,8 @@ DEFAULT_AUTH_RAW = os.getenv(
 )
 DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "8000"))
 POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
+DEFAULT_STALE_TIMEOUT = int(os.getenv("YAKKER_STALE_TIMEOUT", "10"))
+DEFAULT_MIN_EXIT_VELO = float(os.getenv("YAKKER_MIN_EXIT_VELO", "65.0"))
 ZONE_SPEED_KEY = "ZoneSpeedMPH"
 REL_SPEED_KEY = "RelSpeedMPH"
 PITCH_VELOCITY_KEYS = (ZONE_SPEED_KEY, REL_SPEED_KEY)
@@ -65,25 +67,27 @@ def _is_valid(value: Optional[float]) -> bool:
     return True
 
 
-def _looks_like_throwback(hit_data: dict) -> bool:
+def _looks_like_throwback(hit_data: dict, max_exit_velo: Optional[float] = None) -> bool:
     """Return True when the hit profile matches a soft throwback to the mound."""
+    if max_exit_velo is None:
+        return False
     exit_velocity = hit_data.get("ExitSpeedMPH")
     if not _is_valid(exit_velocity):
         return False
     exit_velocity = float(exit_velocity)
     # Filter throwbacks based solely on low exit velocity
     # Throwbacks are characterized by low exit velocity regardless of angle
-    return exit_velocity < THROWBACK_MAX_EXIT_VELO
+    return exit_velocity < max_exit_velo
 
 
-def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str]) -> bool:
+def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str], max_exit_velo: Optional[float] = None) -> bool:
     """
     Treat hits as valid when they include trustworthy bat metrics, while filtering out
     short throwbacks that Yakker reports as hit-only events.
     """
     if not hit_data:
         return False
-    if _looks_like_throwback(hit_data):
+    if _looks_like_throwback(hit_data, max_exit_velo=max_exit_velo):
         return False
 
     if _is_valid(hit_data.get("ExitSpeedMPH")):
@@ -121,7 +125,6 @@ class MetricAggregator:
         "hit_distance_ft",
         "hangtime_sec",
     )
-    STALE_TIMEOUT_SECONDS = 10
     ROLLING_WINDOW_SECONDS = 1.0
 
     class MetricEntry(TypedDict):
@@ -133,7 +136,8 @@ class MetricAggregator:
         value: float
         timestamp: float
 
-    def __init__(self) -> None:
+    def __init__(self, stale_timeout: int = DEFAULT_STALE_TIMEOUT) -> None:
+        self.stale_timeout_seconds = stale_timeout
         self.events: Dict[str, Dict[str, Optional[float]]] = {}
         self.latest_event_id: Optional[str] = None
         self.last_update_ts: Optional[float] = None
@@ -201,7 +205,7 @@ class MetricAggregator:
             now = time.time()
             self._purge_stale_metrics(now)
             self._cleanup_rolling_buffer(now)
-            if now - self.last_update_ts > self.STALE_TIMEOUT_SECONDS:
+            if now - self.last_update_ts > self.stale_timeout_seconds:
                 return None
             return self._current_summary(now)
     
@@ -299,7 +303,7 @@ class MetricAggregator:
         }
 
     def _is_stale(self, updated_at: Optional[float], now: float) -> bool:
-        return updated_at is None or now - updated_at > self.STALE_TIMEOUT_SECONDS
+        return updated_at is None or now - updated_at > self.stale_timeout_seconds
 
 
 async def process_payload(
@@ -307,6 +311,7 @@ async def process_payload(
     aggregator: MetricAggregator,
     *,
     echo_console: bool = True,
+    max_exit_velo: Optional[float] = None,
 ) -> Optional[Dict[str, Optional[float]]]:
     event_id = payload.get("event_uuid") or payload.get("eventId")
     pitch_data = payload.get("pitch_data") or {}
@@ -316,7 +321,7 @@ async def process_payload(
     pitch_velocity = pitch_data.get(ZONE_SPEED_KEY) or pitch_data.get(REL_SPEED_KEY)
     spin_rate = pitch_data.get(SPIN_RATE_KEY)
 
-    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events)
+    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events, max_exit_velo=max_exit_velo)
     exit_velocity = hit_data.get("ExitSpeedMPH") if include_hit else None
     launch_angle = hit_data.get("AngleDegrees") if include_hit else None
     hit_distance = hit_data.get("DistanceFeet") if include_hit else None
@@ -366,6 +371,7 @@ class YakkerStreamer:
         *,
         echo_console: bool = True,
         payload_hooks: Optional[List[PayloadHook]] = None,
+        max_exit_velo: Optional[float] = None,
     ) -> None:
         self.ws_url = ws_url
         self.auth_value = auth_value
@@ -373,6 +379,7 @@ class YakkerStreamer:
         self.echo_console = echo_console
         self.status = status
         self.payload_hooks = payload_hooks or []
+        self.max_exit_velo = max_exit_velo
 
     async def run(self) -> None:
         headers = {}
@@ -400,6 +407,7 @@ class YakkerStreamer:
                                         payload,
                                         self.aggregator,
                                         echo_console=self.echo_console,
+                                        max_exit_velo=self.max_exit_velo,
                                     )
                                 except json.JSONDecodeError as exc:
                                     print(f"⚠️  Bad payload: {exc}", file=sys.stderr, flush=True)
@@ -426,6 +434,7 @@ async def demo_feed(
     *,
     echo_console: bool = True,
     payload_hooks: Optional[List[PayloadHook]] = None,
+    max_exit_velo: Optional[float] = None,
 ) -> None:
     status["connection"] = "demo"
     samples = [
@@ -448,7 +457,7 @@ async def demo_feed(
     while True:
         for sample in samples:
             await _dispatch_payload_hooks(payload_hooks, sample)
-            await process_payload(sample, aggregator, echo_console=echo_console)
+            await process_payload(sample, aggregator, echo_console=echo_console, max_exit_velo=max_exit_velo)
             await asyncio.sleep(POLL_INTERVAL_SECONDS)
 
 
@@ -709,6 +718,18 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Silence console metric updates",
     )
+    parser.add_argument(
+        "--stale-timeout",
+        type=int,
+        default=DEFAULT_STALE_TIMEOUT,
+        help="Stale timeout in seconds (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--min-exit-velo",
+        type=float,
+        default=None,
+        help="Minimum exit velocity threshold in mph; omit to disable filtering",
+    )
     return parser.parse_args()
 
 
@@ -730,7 +751,7 @@ async def main() -> None:
         datefmt="%H:%M:%S",
     )
 
-    aggregator = MetricAggregator()
+    aggregator = MetricAggregator(stale_timeout=args.stale_timeout)
     status: Dict[str, str] = {"connection": "starting"}
     app = build_app(aggregator, status, args.port)
     runner = await _run_server(app, args.port)
@@ -755,7 +776,7 @@ async def main() -> None:
 
     if args.demo:
         feed_task = asyncio.create_task(
-            demo_feed(aggregator, status, echo_console=not args.no_console)
+            demo_feed(aggregator, status, echo_console=not args.no_console, max_exit_velo=args.min_exit_velo)
         )
     else:
         feed_task = asyncio.create_task(
@@ -765,6 +786,7 @@ async def main() -> None:
                 aggregator=aggregator,
                 status=status,
                 echo_console=not args.no_console,
+                max_exit_velo=args.min_exit_velo,
             ).run()
         )
 

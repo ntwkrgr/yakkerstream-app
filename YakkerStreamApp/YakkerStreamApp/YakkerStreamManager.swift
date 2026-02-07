@@ -98,6 +98,21 @@ class YakkerStreamManager: ObservableObject {
             UserDefaults.standard.set(httpPort, forKey: "httpPort")
         }
     }
+    @Published var staleTimeout: Int {
+        didSet {
+            UserDefaults.standard.set(staleTimeout, forKey: "staleTimeout")
+        }
+    }
+    @Published var minimumExitVeloEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(minimumExitVeloEnabled, forKey: "minimumExitVeloEnabled")
+        }
+    }
+    @Published var minimumExitVelo: Double {
+        didSet {
+            UserDefaults.standard.set(minimumExitVelo, forKey: "minimumExitVelo")
+        }
+    }
     
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
@@ -110,8 +125,10 @@ class YakkerStreamManager: ObservableObject {
     private static let processTerminationDelay: TimeInterval = 1.0
     /// Default HTTP port for backend server
     static let defaultBackendPort = 8000
-    /// Ignore exit velocity readings below this threshold (throwbacks, foul tips, etc.)
-    private static let minimumExitVelocity: Double = 65.0
+    /// Default stale timeout in seconds
+    static let defaultStaleTimeout = 10
+    /// Default minimum exit velocity threshold
+    static let defaultMinimumExitVelocity: Double = 65.0
     /// Max terminal log lines to retain in UI
     private static let maxTerminalLines = 200
     
@@ -189,6 +206,15 @@ class YakkerStreamManager: ObservableObject {
         self.authKey = KeychainHelper.load(key: "yakkerAuthKey") ?? ""
         let savedPort = UserDefaults.standard.integer(forKey: "httpPort")
         self.httpPort = savedPort > 0 ? savedPort : Self.defaultBackendPort
+        let savedStaleTimeout = UserDefaults.standard.integer(forKey: "staleTimeout")
+        self.staleTimeout = savedStaleTimeout > 0 ? savedStaleTimeout : Self.defaultStaleTimeout
+        if UserDefaults.standard.object(forKey: "minimumExitVeloEnabled") != nil {
+            self.minimumExitVeloEnabled = UserDefaults.standard.bool(forKey: "minimumExitVeloEnabled")
+        } else {
+            self.minimumExitVeloEnabled = true
+        }
+        let savedMinExitVelo = UserDefaults.standard.double(forKey: "minimumExitVelo")
+        self.minimumExitVelo = savedMinExitVelo > 0 ? savedMinExitVelo : Self.defaultMinimumExitVelocity
     }
 
     /// Returns the path to the app's working directory in Application Support
@@ -314,9 +340,11 @@ class YakkerStreamManager: ObservableObject {
         let escapedAuthHeader = shellEscape(authHeader)
 
         // Change to working directory and run yakker.sh with custom settings
-        let script = """
-        cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader) --port \(httpPort)
-        """
+        var scriptCmd = "cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader) --port \(httpPort) --stale-timeout \(staleTimeout)"
+        if minimumExitVeloEnabled {
+            scriptCmd += " --min-exit-velo \(minimumExitVelo)"
+        }
+        let script = scriptCmd
         
         process.arguments = ["-c", script]
         
@@ -508,9 +536,10 @@ class YakkerStreamManager: ObservableObject {
         // The backend writes ProScoreboard baseball attributes (e.g. h="Exit Velo", er="Pitch Velo").
         // See livedata.xml.template for the mapping rationale.
         let rawExitVelocity = extractValue(from: xml, patternKey: "exitVelo")
-        if let exitValue = rawExitVelocity,
+        if minimumExitVeloEnabled,
+           let exitValue = rawExitVelocity,
            let exitDouble = Double(exitValue),
-           exitDouble < Self.minimumExitVelocity {
+           exitDouble < minimumExitVelo {
             metrics.exitVelocity = nil
         } else {
             metrics.exitVelocity = rawExitVelocity
