@@ -113,6 +113,11 @@ class YakkerStreamManager: ObservableObject {
             UserDefaults.standard.set(minimumExitVelo, forKey: "minimumExitVelo")
         }
     }
+    @Published var sidearmUrl: String {
+        didSet {
+            UserDefaults.standard.set(sidearmUrl, forKey: "sidearmUrl")
+        }
+    }
     
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
@@ -215,6 +220,7 @@ class YakkerStreamManager: ObservableObject {
         }
         let savedMinExitVelo = UserDefaults.standard.double(forKey: "minimumExitVelo")
         self.minimumExitVelo = savedMinExitVelo > 0 ? savedMinExitVelo : Self.defaultMinimumExitVelocity
+        self.sidearmUrl = UserDefaults.standard.string(forKey: "sidearmUrl") ?? ""
     }
 
     /// Returns the path to the app's working directory in Application Support
@@ -343,6 +349,9 @@ class YakkerStreamManager: ObservableObject {
         var scriptCmd = "cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader) --port \(httpPort) --stale-timeout \(staleTimeout)"
         if minimumExitVeloEnabled {
             scriptCmd += " --min-exit-velo \(minimumExitVelo)"
+        }
+        if !sidearmUrl.isEmpty {
+            scriptCmd += " --sidearm-url \(shellEscape(sidearmUrl))"
         }
         let script = scriptCmd
         

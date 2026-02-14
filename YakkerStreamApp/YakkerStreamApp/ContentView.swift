@@ -392,6 +392,24 @@ struct SettingsView: View {
                         .padding(.top, 8)
                     }
                     
+                    // Player Info Settings
+                    GroupBox(label: Label("Player Info", systemImage: "person.2")) {
+                        VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Sidearm Sports XML URL:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                TextField("https://stats.example.com/livedata.xml", text: $manager.sidearmUrl)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .disabled(manager.isRunning)
+                                Text("Optional — imports home team player data from a Sidearm Sports XML feed")
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.top, 8)
+                    }
+                    
                     if manager.isRunning {
                         Text("Some settings are disabled while the stream is running.")
                             .font(.caption)
