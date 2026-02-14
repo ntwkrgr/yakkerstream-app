@@ -32,6 +32,7 @@ POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
 DEFAULT_STALE_TIMEOUT = int(os.getenv("YAKKER_STALE_TIMEOUT", "10"))
 DEFAULT_MIN_EXIT_VELO = float(os.getenv("YAKKER_MIN_EXIT_VELO", "65.0"))
 DEFAULT_SIDEARM_URL = os.getenv("YAKKER_SIDEARM_URL", "")
+DEFAULT_SIDEARM_FILE = os.getenv("YAKKER_SIDEARM_FILE", "")
 SIDEARM_FETCH_INTERVAL = 30  # seconds between Sidearm XML fetches
 ZONE_SPEED_KEY = "ZoneSpeedMPH"
 REL_SPEED_KEY = "RelSpeedMPH"
@@ -484,6 +485,48 @@ _SECOND_TEAM_RE = re.compile(
 )
 
 
+def _extract_home_team_block(text: str) -> Optional[str]:
+    """Extract the home team <team> block from ProScoreboard XML text.
+
+    Looks for ``<team vh="H" ...>`` first, then falls back to the second
+    ``<team>`` block if the ``vh`` attribute isn't present.
+    """
+    home_match = re.search(
+        r'<team\b[^>]*\bvh="H"[^>]*>.*?</team>', text, re.DOTALL
+    )
+    if home_match:
+        return home_match.group(0)
+    teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
+    if len(teams) >= 2:
+        return teams[1]
+    return None
+
+
+def load_sidearm_file(path: str) -> None:
+    """Read a local Sidearm Sports XML file and cache the home team block."""
+    global _sidearm_team_block
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+        home_team_xml = _extract_home_team_block(text)
+        if home_team_xml:
+            _sidearm_team_block = home_team_xml
+            print(
+                f"✅ Sidearm home team data loaded from file: {path}",
+                file=sys.stderr, flush=True,
+            )
+        else:
+            print(
+                "⚠️  No home team block found in Sidearm XML file",
+                file=sys.stderr, flush=True,
+            )
+    except Exception as exc:
+        print(
+            f"⚠️  Error reading Sidearm XML file: {exc}",
+            file=sys.stderr, flush=True,
+        )
+
+
 async def fetch_sidearm_xml(url: str) -> None:
     """Periodically fetch Sidearm Sports XML and cache the home team block."""
     global _sidearm_team_block
@@ -499,22 +542,7 @@ async def fetch_sidearm_xml(url: str) -> None:
                         )
                     else:
                         text = await resp.text()
-                        # Extract the home team block: <team vh="H" ...>...</team>
-                        # Fall back to the second <team> block when vh="H" isn't present
-                        home_match = re.search(
-                            r'<team\b[^>]*\bvh="H"[^>]*>.*?</team>', text, re.DOTALL
-                        )
-                        if not home_match:
-                            teams = re.findall(
-                                r"<team\b[^>]*>.*?</team>", text, re.DOTALL
-                            )
-                            if len(teams) >= 2:
-                                home_team_xml = teams[1]
-                            else:
-                                home_team_xml = None
-                        else:
-                            home_team_xml = home_match.group(0)
-
+                        home_team_xml = _extract_home_team_block(text)
                         if home_team_xml:
                             _sidearm_team_block = home_team_xml
                             print(
@@ -808,6 +836,11 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_SIDEARM_URL,
         help="Optional Sidearm Sports XML feed URL for player info import",
     )
+    parser.add_argument(
+        "--sidearm-file",
+        default=DEFAULT_SIDEARM_FILE,
+        help="Optional path to a local Sidearm Sports XML file for player info import",
+    )
     return parser.parse_args()
 
 
@@ -852,9 +885,11 @@ async def main() -> None:
     # Start livedata.xml updater task
     xml_updater_task = asyncio.create_task(update_livedata_xml(aggregator))
 
-    # Start Sidearm XML fetcher if a URL was provided
+    # Start Sidearm XML fetcher if a URL was provided, or load from file
     sidearm_task: Optional[asyncio.Task] = None
-    if args.sidearm_url:
+    if args.sidearm_file:
+        load_sidearm_file(args.sidearm_file)
+    elif args.sidearm_url:
         sidearm_task = asyncio.create_task(fetch_sidearm_xml(args.sidearm_url))
 
     if args.demo:
