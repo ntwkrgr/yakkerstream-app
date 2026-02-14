@@ -509,14 +509,14 @@ async def fetch_sidearm_xml(url: str) -> None:
                                 r"<team\b[^>]*>.*?</team>", text, re.DOTALL
                             )
                             if len(teams) >= 2:
-                                home_match_str = teams[1]
+                                home_team_xml = teams[1]
                             else:
-                                home_match_str = None
+                                home_team_xml = None
                         else:
-                            home_match_str = home_match.group(0)
+                            home_team_xml = home_match.group(0)
 
-                        if home_match_str:
-                            _sidearm_team_block = home_match_str
+                        if home_team_xml:
+                            _sidearm_team_block = home_team_xml
                             print(
                                 "✅ Sidearm home team data cached",
                                 file=sys.stderr, flush=True,
@@ -579,13 +579,13 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
             
             # If Sidearm data is cached, replace the second team block
             if _sidearm_team_block is not None:
-                m = _SECOND_TEAM_RE.search(xml_content)
-                if m:
+                second_team_match = _SECOND_TEAM_RE.search(xml_content)
+                if second_team_match:
                     xml_content = (
-                        xml_content[: m.start()]
-                        + m.group(1)
+                        xml_content[: second_team_match.start()]
+                        + second_team_match.group(1)
                         + _sidearm_team_block
-                        + xml_content[m.end() :]
+                        + xml_content[second_team_match.end() :]
                     )
 
             # Write the updated content to livedata.xml
