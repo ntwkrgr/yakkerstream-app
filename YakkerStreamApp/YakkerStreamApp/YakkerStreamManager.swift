@@ -362,8 +362,12 @@ class YakkerStreamManager: ObservableObject {
             let fm = FileManager.default
             if fm.fileExists(atPath: sidearmFilePath) {
                 try? fm.removeItem(atPath: sidearmDest)
-                try? fm.copyItem(atPath: sidearmFilePath, toPath: sidearmDest)
-                scriptCmd += " --sidearm-file \(shellEscape(sidearmDest))"
+                do {
+                    try fm.copyItem(atPath: sidearmFilePath, toPath: sidearmDest)
+                    scriptCmd += " --sidearm-file \(shellEscape(sidearmDest))"
+                } catch {
+                    print("Failed to copy Sidearm XML file: \(error.localizedDescription)")
+                }
             }
         } else if !sidearmUrl.isEmpty {
             scriptCmd += " --sidearm-url \(shellEscape(sidearmUrl))"
