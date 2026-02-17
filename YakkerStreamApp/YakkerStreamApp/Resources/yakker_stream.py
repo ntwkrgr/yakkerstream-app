@@ -485,20 +485,35 @@ _SECOND_TEAM_RE = re.compile(
 )
 
 
+def _uppercase_player_attrs(team_xml: str) -> str:
+    """Uppercase player name, shortname, and pos attribute values in a team block."""
+    def _upper_attr(match: re.Match) -> str:
+        return match.group(1) + match.group(2).upper() + '"'
+    for attr in ("name", "shortname", "pos"):
+        team_xml = re.sub(
+            rf'(\b{attr}=")([^"]*)"',
+            _upper_attr,
+            team_xml,
+        )
+    return team_xml
+
+
 def _extract_home_team_block(text: str) -> Optional[str]:
     """Extract the home team <team> block from ProScoreboard XML text.
 
     Looks for ``<team vh="H" ...>`` first, then falls back to the second
     ``<team>`` block if the ``vh`` attribute isn't present.
+
+    Player names and positions are uppercased for scoreboard display.
     """
     home_match = re.search(
         r'<team\b[^>]*\bvh="H"[^>]*>.*?</team>', text, re.DOTALL
     )
     if home_match:
-        return home_match.group(0)
+        return _uppercase_player_attrs(home_match.group(0))
     teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
     if len(teams) >= 2:
-        return teams[1]
+        return _uppercase_player_attrs(teams[1])
     return None
 
 
