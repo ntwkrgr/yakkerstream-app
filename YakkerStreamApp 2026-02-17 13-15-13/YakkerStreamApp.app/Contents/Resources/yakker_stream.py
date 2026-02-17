@@ -29,6 +29,11 @@ DEFAULT_AUTH_RAW = os.getenv(
 )
 DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "8000"))
 POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
+DEFAULT_STALE_TIMEOUT = int(os.getenv("YAKKER_STALE_TIMEOUT", "10"))
+DEFAULT_MIN_EXIT_VELO = float(os.getenv("YAKKER_MIN_EXIT_VELO", "65.0"))
+DEFAULT_SIDEARM_URL = os.getenv("YAKKER_SIDEARM_URL", "")
+DEFAULT_SIDEARM_FILE = os.getenv("YAKKER_SIDEARM_FILE", "")
+SIDEARM_FETCH_INTERVAL = 30  # seconds between Sidearm XML fetches
 ZONE_SPEED_KEY = "ZoneSpeedMPH"
 REL_SPEED_KEY = "RelSpeedMPH"
 PITCH_VELOCITY_KEYS = (ZONE_SPEED_KEY, REL_SPEED_KEY)
@@ -65,25 +70,27 @@ def _is_valid(value: Optional[float]) -> bool:
     return True
 
 
-def _looks_like_throwback(hit_data: dict) -> bool:
+def _looks_like_throwback(hit_data: dict, min_exit_velo: Optional[float] = None) -> bool:
     """Return True when the hit profile matches a soft throwback to the mound."""
+    if min_exit_velo is None:
+        return False
     exit_velocity = hit_data.get("ExitSpeedMPH")
     if not _is_valid(exit_velocity):
         return False
     exit_velocity = float(exit_velocity)
     # Filter throwbacks based solely on low exit velocity
     # Throwbacks are characterized by low exit velocity regardless of angle
-    return exit_velocity < THROWBACK_MAX_EXIT_VELO
+    return exit_velocity < min_exit_velo
 
 
-def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str]) -> bool:
+def _is_true_hit(hit_data: dict, pitch_data: dict, contributing_events: List[str], min_exit_velo: Optional[float] = None) -> bool:
     """
     Treat hits as valid when they include trustworthy bat metrics, while filtering out
     short throwbacks that Yakker reports as hit-only events.
     """
     if not hit_data:
         return False
-    if _looks_like_throwback(hit_data):
+    if _looks_like_throwback(hit_data, min_exit_velo=min_exit_velo):
         return False
 
     if _is_valid(hit_data.get("ExitSpeedMPH")):
@@ -121,7 +128,6 @@ class MetricAggregator:
         "hit_distance_ft",
         "hangtime_sec",
     )
-    STALE_TIMEOUT_SECONDS = 10
     ROLLING_WINDOW_SECONDS = 1.0
 
     class MetricEntry(TypedDict):
@@ -133,7 +139,8 @@ class MetricAggregator:
         value: float
         timestamp: float
 
-    def __init__(self) -> None:
+    def __init__(self, stale_timeout: int = DEFAULT_STALE_TIMEOUT) -> None:
+        self.stale_timeout_seconds = stale_timeout
         self.events: Dict[str, Dict[str, Optional[float]]] = {}
         self.latest_event_id: Optional[str] = None
         self.last_update_ts: Optional[float] = None
@@ -201,7 +208,7 @@ class MetricAggregator:
             now = time.time()
             self._purge_stale_metrics(now)
             self._cleanup_rolling_buffer(now)
-            if now - self.last_update_ts > self.STALE_TIMEOUT_SECONDS:
+            if now - self.last_update_ts > self.stale_timeout_seconds:
                 return None
             return self._current_summary(now)
     
@@ -299,7 +306,7 @@ class MetricAggregator:
         }
 
     def _is_stale(self, updated_at: Optional[float], now: float) -> bool:
-        return updated_at is None or now - updated_at > self.STALE_TIMEOUT_SECONDS
+        return updated_at is None or now - updated_at > self.stale_timeout_seconds
 
 
 async def process_payload(
@@ -307,6 +314,7 @@ async def process_payload(
     aggregator: MetricAggregator,
     *,
     echo_console: bool = True,
+    min_exit_velo: Optional[float] = None,
 ) -> Optional[Dict[str, Optional[float]]]:
     event_id = payload.get("event_uuid") or payload.get("eventId")
     pitch_data = payload.get("pitch_data") or {}
@@ -316,7 +324,7 @@ async def process_payload(
     pitch_velocity = pitch_data.get(ZONE_SPEED_KEY) or pitch_data.get(REL_SPEED_KEY)
     spin_rate = pitch_data.get(SPIN_RATE_KEY)
 
-    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events)
+    include_hit = _is_true_hit(hit_data, pitch_data, contributing_events, min_exit_velo=min_exit_velo)
     exit_velocity = hit_data.get("ExitSpeedMPH") if include_hit else None
     launch_angle = hit_data.get("AngleDegrees") if include_hit else None
     hit_distance = hit_data.get("DistanceFeet") if include_hit else None
@@ -366,6 +374,7 @@ class YakkerStreamer:
         *,
         echo_console: bool = True,
         payload_hooks: Optional[List[PayloadHook]] = None,
+        min_exit_velo: Optional[float] = None,
     ) -> None:
         self.ws_url = ws_url
         self.auth_value = auth_value
@@ -373,6 +382,7 @@ class YakkerStreamer:
         self.echo_console = echo_console
         self.status = status
         self.payload_hooks = payload_hooks or []
+        self.min_exit_velo = min_exit_velo
 
     async def run(self) -> None:
         headers = {}
@@ -400,6 +410,7 @@ class YakkerStreamer:
                                         payload,
                                         self.aggregator,
                                         echo_console=self.echo_console,
+                                        min_exit_velo=self.min_exit_velo,
                                     )
                                 except json.JSONDecodeError as exc:
                                     print(f"⚠️  Bad payload: {exc}", file=sys.stderr, flush=True)
@@ -426,6 +437,7 @@ async def demo_feed(
     *,
     echo_console: bool = True,
     payload_hooks: Optional[List[PayloadHook]] = None,
+    min_exit_velo: Optional[float] = None,
 ) -> None:
     status["connection"] = "demo"
     samples = [
@@ -448,7 +460,7 @@ async def demo_feed(
     while True:
         for sample in samples:
             await _dispatch_payload_hooks(payload_hooks, sample)
-            await process_payload(sample, aggregator, echo_console=echo_console)
+            await process_payload(sample, aggregator, echo_console=echo_console, min_exit_velo=min_exit_velo)
             await asyncio.sleep(POLL_INTERVAL_SECONDS)
 
 
@@ -461,6 +473,173 @@ async def periodic_updater(aggregator: MetricAggregator) -> None:
             await aggregator.get_rolling_summary()
         except Exception as exc:
             print(f"⚠️  Error in periodic updater: {exc}", file=sys.stderr, flush=True)
+
+
+# Cached Sidearm team XML blocks (populated by fetch_sidearm_xml / load_sidearm_file)
+_sidearm_home_block: Optional[str] = None
+_sidearm_visitor_block: Optional[str] = None
+# Regex to match the second <team ...>...</team> block in the generated XML
+_SECOND_TEAM_RE = re.compile(
+    r"(</team>\s*)"          # end of 1st team block (captured so we keep it)
+    r"(<team\b.*?</team>)",  # entire 2nd team block
+    re.DOTALL,
+)
+# Regex to match the first <team ...>...</team> block in the generated XML
+_FIRST_TEAM_RE = re.compile(
+    r"(<team\b[^>]*>.*?</team>)",
+    re.DOTALL,
+)
+# Regex to match the <totals>...</totals> section within a team block
+_TOTALS_RE = re.compile(r"<totals>.*?</totals>", re.DOTALL)
+
+
+def _uppercase_player_attrs(team_xml: str) -> str:
+    """Uppercase player name, shortname, and pos attribute values in a team block."""
+    def _upper_attr(match: re.Match) -> str:
+        return match.group(1) + match.group(2).upper() + '"'
+    for attr in ("name", "shortname", "pos"):
+        team_xml = re.sub(
+            rf'(\b{attr}=")([^"]*)"',
+            _upper_attr,
+            team_xml,
+        )
+    return team_xml
+
+
+def _extract_home_team_block(text: str) -> Optional[str]:
+    """Extract the home team <team> block from ProScoreboard XML text.
+
+    Looks for ``<team vh="H" ...>`` first, then falls back to the second
+    ``<team>`` block if the ``vh`` attribute isn't present.
+
+    Player names and positions are uppercased for scoreboard display.
+    """
+    home_match = re.search(
+        r'<team\b[^>]*\bvh="H"[^>]*>.*?</team>', text, re.DOTALL
+    )
+    if home_match:
+        return _uppercase_player_attrs(home_match.group(0))
+    teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
+    if len(teams) >= 2:
+        return _uppercase_player_attrs(teams[1])
+    return None
+
+
+def _extract_visitor_team_block(text: str) -> Optional[str]:
+    """Extract the visitor team <team> block from ProScoreboard XML text.
+
+    Looks for ``<team vh="V" ...>`` first, then falls back to the first
+    ``<team>`` block if the ``vh`` attribute isn't present.
+
+    Player names and positions are uppercased for scoreboard display.
+    """
+    visitor_match = re.search(
+        r'<team\b[^>]*\bvh="V"[^>]*>.*?</team>', text, re.DOTALL
+    )
+    if visitor_match:
+        return _uppercase_player_attrs(visitor_match.group(0))
+    teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
+    if teams:
+        return _uppercase_player_attrs(teams[0])
+    return None
+
+
+def _merge_visitor_preserve_totals(visitor_xml: str, existing_totals: Optional[str]) -> str:
+    """Return *visitor_xml* with its ``<totals>`` section replaced by *existing_totals*.
+
+    If *existing_totals* is ``None`` the visitor block is returned unchanged.
+    If the visitor block already contains a ``<totals>`` section it is swapped out.
+    Otherwise the preserved totals are inserted just before the closing ``</team>`` tag.
+    """
+    if existing_totals is None:
+        return visitor_xml
+    if _TOTALS_RE.search(visitor_xml):
+        return _TOTALS_RE.sub(existing_totals, visitor_xml, count=1)
+    return visitor_xml.replace("</team>", "    " + existing_totals + "\n  </team>")
+
+
+def load_sidearm_file(path: str) -> None:
+    """Read a local Sidearm Sports XML file and cache both team blocks."""
+    global _sidearm_home_block, _sidearm_visitor_block
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+        home_team_xml = _extract_home_team_block(text)
+        if home_team_xml:
+            _sidearm_home_block = home_team_xml
+            print(
+                f"✅ Sidearm home team data loaded from file: {path}",
+                file=sys.stderr, flush=True,
+            )
+        else:
+            print(
+                "⚠️  No home team block found in Sidearm XML file",
+                file=sys.stderr, flush=True,
+            )
+        visitor_team_xml = _extract_visitor_team_block(text)
+        if visitor_team_xml:
+            _sidearm_visitor_block = visitor_team_xml
+            print(
+                f"✅ Sidearm visitor team data loaded from file: {path}",
+                file=sys.stderr, flush=True,
+            )
+        else:
+            print(
+                "⚠️  No visitor team block found in Sidearm XML file",
+                file=sys.stderr, flush=True,
+            )
+    except Exception as exc:
+        print(
+            f"⚠️  Error reading Sidearm XML file: {exc}",
+            file=sys.stderr, flush=True,
+        )
+
+
+async def fetch_sidearm_xml(url: str) -> None:
+    """Periodically fetch Sidearm Sports XML and cache both team blocks."""
+    global _sidearm_home_block, _sidearm_visitor_block
+    print(f"📋 Sidearm XML import enabled: {url}", file=sys.stderr, flush=True)
+    async with ClientSession() as session:
+        while True:
+            try:
+                async with session.get(url) as resp:
+                    if resp.status != 200:
+                        print(
+                            f"⚠️  Sidearm fetch returned HTTP {resp.status}",
+                            file=sys.stderr, flush=True,
+                        )
+                    else:
+                        text = await resp.text()
+                        home_team_xml = _extract_home_team_block(text)
+                        if home_team_xml:
+                            _sidearm_home_block = home_team_xml
+                            print(
+                                "✅ Sidearm home team data cached",
+                                file=sys.stderr, flush=True,
+                            )
+                        else:
+                            print(
+                                "⚠️  No home team block found in Sidearm XML",
+                                file=sys.stderr, flush=True,
+                            )
+                        visitor_team_xml = _extract_visitor_team_block(text)
+                        if visitor_team_xml:
+                            _sidearm_visitor_block = visitor_team_xml
+                            print(
+                                "✅ Sidearm visitor team data cached",
+                                file=sys.stderr, flush=True,
+                            )
+                        else:
+                            print(
+                                "⚠️  No visitor team block found in Sidearm XML",
+                                file=sys.stderr, flush=True,
+                            )
+            except Exception as exc:
+                print(
+                    f"⚠️  Sidearm fetch error: {exc}",
+                    file=sys.stderr, flush=True,
+                )
+            await asyncio.sleep(SIDEARM_FETCH_INTERVAL)
 
 
 async def update_livedata_xml(aggregator: MetricAggregator) -> None:
@@ -506,6 +685,34 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
             xml_content = re.sub(r'XXX-HitDistance-XXX', hit_distance, xml_content)
             xml_content = re.sub(r'XXX-Hangtime-XXX', hangtime, xml_content)
             
+            # If Sidearm visitor data is cached, replace the first team block
+            # while preserving the <totals> section that holds Yakker metrics.
+            if _sidearm_visitor_block is not None:
+                first_team_match = _FIRST_TEAM_RE.search(xml_content)
+                if first_team_match:
+                    current_first_team = first_team_match.group(1)
+                    totals_match = _TOTALS_RE.search(current_first_team)
+                    merged_visitor = _merge_visitor_preserve_totals(
+                        _sidearm_visitor_block,
+                        totals_match.group(0) if totals_match else None,
+                    )
+                    xml_content = (
+                        xml_content[: first_team_match.start(1)]
+                        + merged_visitor
+                        + xml_content[first_team_match.end(1) :]
+                    )
+
+            # If Sidearm home data is cached, replace the second team block
+            if _sidearm_home_block is not None:
+                second_team_match = _SECOND_TEAM_RE.search(xml_content)
+                if second_team_match:
+                    xml_content = (
+                        xml_content[: second_team_match.start()]
+                        + second_team_match.group(1)
+                        + _sidearm_home_block
+                        + xml_content[second_team_match.end() :]
+                    )
+
             # Write the updated content to livedata.xml
             with open(livedata_path, 'w', encoding='utf-8') as f:
                 f.write(xml_content)
@@ -709,6 +916,28 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Silence console metric updates",
     )
+    parser.add_argument(
+        "--stale-timeout",
+        type=int,
+        default=DEFAULT_STALE_TIMEOUT,
+        help="Stale timeout in seconds (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--min-exit-velo",
+        type=float,
+        default=None,
+        help="Minimum exit velocity threshold in mph; omit to disable filtering",
+    )
+    parser.add_argument(
+        "--sidearm-url",
+        default=DEFAULT_SIDEARM_URL,
+        help="Optional Sidearm Sports XML feed URL for player info import",
+    )
+    parser.add_argument(
+        "--sidearm-file",
+        default=DEFAULT_SIDEARM_FILE,
+        help="Optional path to a local Sidearm Sports XML file for player info import",
+    )
     return parser.parse_args()
 
 
@@ -730,7 +959,7 @@ async def main() -> None:
         datefmt="%H:%M:%S",
     )
 
-    aggregator = MetricAggregator()
+    aggregator = MetricAggregator(stale_timeout=args.stale_timeout)
     status: Dict[str, str] = {"connection": "starting"}
     app = build_app(aggregator, status, args.port)
     runner = await _run_server(app, args.port)
@@ -753,9 +982,16 @@ async def main() -> None:
     # Start livedata.xml updater task
     xml_updater_task = asyncio.create_task(update_livedata_xml(aggregator))
 
+    # Start Sidearm XML fetcher if a URL was provided, or load from file
+    sidearm_task: Optional[asyncio.Task] = None
+    if args.sidearm_file:
+        load_sidearm_file(args.sidearm_file)
+    elif args.sidearm_url:
+        sidearm_task = asyncio.create_task(fetch_sidearm_xml(args.sidearm_url))
+
     if args.demo:
         feed_task = asyncio.create_task(
-            demo_feed(aggregator, status, echo_console=not args.no_console)
+            demo_feed(aggregator, status, echo_console=not args.no_console, min_exit_velo=args.min_exit_velo)
         )
     else:
         feed_task = asyncio.create_task(
@@ -765,12 +1001,15 @@ async def main() -> None:
                 aggregator=aggregator,
                 status=status,
                 echo_console=not args.no_console,
+                min_exit_velo=args.min_exit_velo,
             ).run()
         )
 
     await stop_event.wait()
     updater_task.cancel()
     xml_updater_task.cancel()
+    if sidearm_task is not None:
+        sidearm_task.cancel()
     feed_task.cancel()
     try:
         await updater_task
@@ -780,6 +1019,11 @@ async def main() -> None:
         await xml_updater_task
     except asyncio.CancelledError:
         pass
+    if sidearm_task is not None:
+        try:
+            await sidearm_task
+        except asyncio.CancelledError:
+            pass
     try:
         await feed_task
     except asyncio.CancelledError:
