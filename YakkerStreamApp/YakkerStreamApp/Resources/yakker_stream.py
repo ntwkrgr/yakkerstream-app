@@ -31,6 +31,9 @@ DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "8000"))
 POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
 DEFAULT_STALE_TIMEOUT = int(os.getenv("YAKKER_STALE_TIMEOUT", "10"))
 DEFAULT_MIN_EXIT_VELO = float(os.getenv("YAKKER_MIN_EXIT_VELO", "65.0"))
+DEFAULT_SIDEARM_URL = os.getenv("YAKKER_SIDEARM_URL", "")
+DEFAULT_SIDEARM_FILE = os.getenv("YAKKER_SIDEARM_FILE", "")
+SIDEARM_FETCH_INTERVAL = 30  # seconds between Sidearm XML fetches
 ZONE_SPEED_KEY = "ZoneSpeedMPH"
 REL_SPEED_KEY = "RelSpeedMPH"
 PITCH_VELOCITY_KEYS = (ZONE_SPEED_KEY, REL_SPEED_KEY)
@@ -472,6 +475,108 @@ async def periodic_updater(aggregator: MetricAggregator) -> None:
             print(f"⚠️  Error in periodic updater: {exc}", file=sys.stderr, flush=True)
 
 
+# Cached Sidearm home team XML block (populated by fetch_sidearm_xml)
+_sidearm_team_block: Optional[str] = None
+# Regex to match the second <team ...>...</team> block in the generated XML
+_SECOND_TEAM_RE = re.compile(
+    r"(</team>\s*)"          # end of 1st team block (captured so we keep it)
+    r"(<team\b.*?</team>)",  # entire 2nd team block
+    re.DOTALL,
+)
+
+
+def _uppercase_player_attrs(team_xml: str) -> str:
+    """Uppercase player name, shortname, and pos attribute values in a team block."""
+    def _upper_attr(match: re.Match) -> str:
+        return match.group(1) + match.group(2).upper() + '"'
+    for attr in ("name", "shortname", "pos"):
+        team_xml = re.sub(
+            rf'(\b{attr}=")([^"]*)"',
+            _upper_attr,
+            team_xml,
+        )
+    return team_xml
+
+
+def _extract_home_team_block(text: str) -> Optional[str]:
+    """Extract the home team <team> block from ProScoreboard XML text.
+
+    Looks for ``<team vh="H" ...>`` first, then falls back to the second
+    ``<team>`` block if the ``vh`` attribute isn't present.
+
+    Player names and positions are uppercased for scoreboard display.
+    """
+    home_match = re.search(
+        r'<team\b[^>]*\bvh="H"[^>]*>.*?</team>', text, re.DOTALL
+    )
+    if home_match:
+        return _uppercase_player_attrs(home_match.group(0))
+    teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
+    if len(teams) >= 2:
+        return _uppercase_player_attrs(teams[1])
+    return None
+
+
+def load_sidearm_file(path: str) -> None:
+    """Read a local Sidearm Sports XML file and cache the home team block."""
+    global _sidearm_team_block
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            text = f.read()
+        home_team_xml = _extract_home_team_block(text)
+        if home_team_xml:
+            _sidearm_team_block = home_team_xml
+            print(
+                f"✅ Sidearm home team data loaded from file: {path}",
+                file=sys.stderr, flush=True,
+            )
+        else:
+            print(
+                "⚠️  No home team block found in Sidearm XML file",
+                file=sys.stderr, flush=True,
+            )
+    except Exception as exc:
+        print(
+            f"⚠️  Error reading Sidearm XML file: {exc}",
+            file=sys.stderr, flush=True,
+        )
+
+
+async def fetch_sidearm_xml(url: str) -> None:
+    """Periodically fetch Sidearm Sports XML and cache the home team block."""
+    global _sidearm_team_block
+    print(f"📋 Sidearm XML import enabled: {url}", file=sys.stderr, flush=True)
+    async with ClientSession() as session:
+        while True:
+            try:
+                async with session.get(url) as resp:
+                    if resp.status != 200:
+                        print(
+                            f"⚠️  Sidearm fetch returned HTTP {resp.status}",
+                            file=sys.stderr, flush=True,
+                        )
+                    else:
+                        text = await resp.text()
+                        home_team_xml = _extract_home_team_block(text)
+                        if home_team_xml:
+                            _sidearm_team_block = home_team_xml
+                            print(
+                                "✅ Sidearm home team data cached",
+                                file=sys.stderr, flush=True,
+                            )
+                        else:
+                            print(
+                                "⚠️  No home team block found in Sidearm XML",
+                                file=sys.stderr, flush=True,
+                            )
+            except Exception as exc:
+                print(
+                    f"⚠️  Sidearm fetch error: {exc}",
+                    file=sys.stderr, flush=True,
+                )
+            await asyncio.sleep(SIDEARM_FETCH_INTERVAL)
+
+
 async def update_livedata_xml(aggregator: MetricAggregator) -> None:
     """Update livedata.xml file every second with current Yakker data."""
     # Get the directory where the script is located
@@ -515,6 +620,17 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
             xml_content = re.sub(r'XXX-HitDistance-XXX', hit_distance, xml_content)
             xml_content = re.sub(r'XXX-Hangtime-XXX', hangtime, xml_content)
             
+            # If Sidearm data is cached, replace the second team block
+            if _sidearm_team_block is not None:
+                second_team_match = _SECOND_TEAM_RE.search(xml_content)
+                if second_team_match:
+                    xml_content = (
+                        xml_content[: second_team_match.start()]
+                        + second_team_match.group(1)
+                        + _sidearm_team_block
+                        + xml_content[second_team_match.end() :]
+                    )
+
             # Write the updated content to livedata.xml
             with open(livedata_path, 'w', encoding='utf-8') as f:
                 f.write(xml_content)
@@ -730,6 +846,16 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Minimum exit velocity threshold in mph; omit to disable filtering",
     )
+    parser.add_argument(
+        "--sidearm-url",
+        default=DEFAULT_SIDEARM_URL,
+        help="Optional Sidearm Sports XML feed URL for player info import",
+    )
+    parser.add_argument(
+        "--sidearm-file",
+        default=DEFAULT_SIDEARM_FILE,
+        help="Optional path to a local Sidearm Sports XML file for player info import",
+    )
     return parser.parse_args()
 
 
@@ -774,6 +900,13 @@ async def main() -> None:
     # Start livedata.xml updater task
     xml_updater_task = asyncio.create_task(update_livedata_xml(aggregator))
 
+    # Start Sidearm XML fetcher if a URL was provided, or load from file
+    sidearm_task: Optional[asyncio.Task] = None
+    if args.sidearm_file:
+        load_sidearm_file(args.sidearm_file)
+    elif args.sidearm_url:
+        sidearm_task = asyncio.create_task(fetch_sidearm_xml(args.sidearm_url))
+
     if args.demo:
         feed_task = asyncio.create_task(
             demo_feed(aggregator, status, echo_console=not args.no_console, min_exit_velo=args.min_exit_velo)
@@ -793,6 +926,8 @@ async def main() -> None:
     await stop_event.wait()
     updater_task.cancel()
     xml_updater_task.cancel()
+    if sidearm_task is not None:
+        sidearm_task.cancel()
     feed_task.cancel()
     try:
         await updater_task
@@ -802,6 +937,11 @@ async def main() -> None:
         await xml_updater_task
     except asyncio.CancelledError:
         pass
+    if sidearm_task is not None:
+        try:
+            await sidearm_task
+        except asyncio.CancelledError:
+            pass
     try:
         await feed_task
     except asyncio.CancelledError:

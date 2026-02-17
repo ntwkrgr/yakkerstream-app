@@ -113,6 +113,16 @@ class YakkerStreamManager: ObservableObject {
             UserDefaults.standard.set(minimumExitVelo, forKey: "minimumExitVelo")
         }
     }
+    @Published var sidearmUrl: String {
+        didSet {
+            UserDefaults.standard.set(sidearmUrl, forKey: "sidearmUrl")
+        }
+    }
+    @Published var sidearmFilePath: String {
+        didSet {
+            UserDefaults.standard.set(sidearmFilePath, forKey: "sidearmFilePath")
+        }
+    }
     
     // Configuration constants
     /// Delay after starting the backend before checking connection status (allows backend to initialize)
@@ -215,6 +225,8 @@ class YakkerStreamManager: ObservableObject {
         }
         let savedMinExitVelo = UserDefaults.standard.double(forKey: "minimumExitVelo")
         self.minimumExitVelo = savedMinExitVelo > 0 ? savedMinExitVelo : Self.defaultMinimumExitVelocity
+        self.sidearmUrl = UserDefaults.standard.string(forKey: "sidearmUrl") ?? ""
+        self.sidearmFilePath = UserDefaults.standard.string(forKey: "sidearmFilePath") ?? ""
     }
 
     /// Returns the path to the app's working directory in Application Support
@@ -343,6 +355,22 @@ class YakkerStreamManager: ObservableObject {
         var scriptCmd = "cd \(escapedWorkingDir) && ./yakker.sh --ws-url \(escapedWsUrl) --auth-header \(escapedAuthHeader) --port \(httpPort) --stale-timeout \(staleTimeout)"
         if minimumExitVeloEnabled {
             scriptCmd += " --min-exit-velo \(minimumExitVelo)"
+        }
+        if !sidearmFilePath.isEmpty {
+            // Copy the uploaded XML file to the working directory for the backend
+            let sidearmDest = (workingDir as NSString).appendingPathComponent("sidearm_upload.xml")
+            let fm = FileManager.default
+            if fm.fileExists(atPath: sidearmFilePath) {
+                try? fm.removeItem(atPath: sidearmDest)
+                do {
+                    try fm.copyItem(atPath: sidearmFilePath, toPath: sidearmDest)
+                    scriptCmd += " --sidearm-file \(shellEscape(sidearmDest))"
+                } catch {
+                    print("Failed to copy Sidearm XML file: \(error.localizedDescription)")
+                }
+            }
+        } else if !sidearmUrl.isEmpty {
+            scriptCmd += " --sidearm-url \(shellEscape(sidearmUrl))"
         }
         let script = scriptCmd
         
