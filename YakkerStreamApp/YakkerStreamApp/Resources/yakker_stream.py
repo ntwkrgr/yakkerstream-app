@@ -544,12 +544,15 @@ def _extract_visitor_team_block(text: str) -> Optional[str]:
     return None
 
 
-def _merge_visitor_preserve_totals(visitor_xml: str, existing_totals: str) -> str:
+def _merge_visitor_preserve_totals(visitor_xml: str, existing_totals: Optional[str]) -> str:
     """Return *visitor_xml* with its ``<totals>`` section replaced by *existing_totals*.
 
+    If *existing_totals* is ``None`` the visitor block is returned unchanged.
     If the visitor block already contains a ``<totals>`` section it is swapped out.
     Otherwise the preserved totals are inserted just before the closing ``</team>`` tag.
     """
+    if existing_totals is None:
+        return visitor_xml
     if _TOTALS_RE.search(visitor_xml):
         return _TOTALS_RE.sub(existing_totals, visitor_xml, count=1)
     return visitor_xml.replace("</team>", "    " + existing_totals + "\n  </team>")
@@ -689,12 +692,10 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
                 if first_team_match:
                     current_first_team = first_team_match.group(1)
                     totals_match = _TOTALS_RE.search(current_first_team)
-                    if totals_match:
-                        merged_visitor = _merge_visitor_preserve_totals(
-                            _sidearm_visitor_block, totals_match.group(0)
-                        )
-                    else:
-                        merged_visitor = _sidearm_visitor_block
+                    merged_visitor = _merge_visitor_preserve_totals(
+                        _sidearm_visitor_block,
+                        totals_match.group(0) if totals_match else None,
+                    )
                     xml_content = (
                         xml_content[: first_team_match.start(1)]
                         + merged_visitor
