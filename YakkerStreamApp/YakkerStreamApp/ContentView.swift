@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
@@ -268,11 +269,25 @@ private struct TerminalLogView: View {
     }
 }
 
+private enum SidearmMode: String {
+    case none
+    case url
+    case file
+}
+
 // Settings view displayed in its own window/sheet
 struct SettingsView: View {
     @ObservedObject var manager = YakkerStreamManager.shared
     @State private var showingHelp = false
+    @State private var sidearmMode: SidearmMode = .none
     @Environment(\.dismiss) var dismiss
+
+    private var sidearmFileName: String {
+        if manager.sidearmFilePath.isEmpty {
+            return "No file selected"
+        }
+        return (manager.sidearmFilePath as NSString).lastPathComponent
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -392,6 +407,73 @@ struct SettingsView: View {
                         .padding(.top, 8)
                     }
                     
+                    // Player Info Settings
+                    GroupBox(label: Label("Player Info", systemImage: "person.2")) {
+                        VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Sidearm Sports XML Source:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Picker("", selection: $sidearmMode) {
+                                    Text("None").tag(SidearmMode.none)
+                                    Text("URL").tag(SidearmMode.url)
+                                    Text("File").tag(SidearmMode.file)
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                .disabled(manager.isRunning)
+                            }
+
+                            if sidearmMode == .url {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Sidearm Sports XML URL:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    TextField("https://stats.example.com/livedata.xml", text: $manager.sidearmUrl)
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .disabled(manager.isRunning)
+                                }
+                            }
+
+                            if sidearmMode == .file {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Sidearm Sports XML File:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    HStack {
+                                        TextField("No file selected", text: .constant(sidearmFileName))
+                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                            .disabled(true)
+                                        Button("Browse…") {
+                                            let panel = NSOpenPanel()
+                                            panel.allowedContentTypes = [.xml]
+                                            panel.allowsMultipleSelection = false
+                                            panel.canChooseDirectories = false
+                                            if panel.runModal() == .OK, let url = panel.url {
+                                                manager.sidearmFilePath = url.path
+                                            }
+                                        }
+                                        .disabled(manager.isRunning)
+                                        if !manager.sidearmFilePath.isEmpty {
+                                            Button(action: {
+                                                manager.sidearmFilePath = ""
+                                            }) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundColor(.secondary)
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
+                                            .disabled(manager.isRunning)
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text("Optional — imports home team player data from a Sidearm Sports XML feed")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.top, 8)
+                    }
+                    
                     if manager.isRunning {
                         Text("Some settings are disabled while the stream is running.")
                             .font(.caption)
@@ -404,6 +486,26 @@ struct SettingsView: View {
         .frame(minWidth: 480, minHeight: 420)
         .sheet(isPresented: $showingHelp) {
             HelpView()
+        }
+        .onAppear {
+            if !manager.sidearmFilePath.isEmpty {
+                sidearmMode = .file
+            } else if !manager.sidearmUrl.isEmpty {
+                sidearmMode = .url
+            } else {
+                sidearmMode = .none
+            }
+        }
+        .onChange(of: sidearmMode) { newMode in
+            switch newMode {
+            case .none:
+                manager.sidearmUrl = ""
+                manager.sidearmFilePath = ""
+            case .url:
+                manager.sidearmFilePath = ""
+            case .file:
+                manager.sidearmUrl = ""
+            }
         }
     }
 }
