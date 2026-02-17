@@ -475,14 +475,22 @@ async def periodic_updater(aggregator: MetricAggregator) -> None:
             print(f"⚠️  Error in periodic updater: {exc}", file=sys.stderr, flush=True)
 
 
-# Cached Sidearm home team XML block (populated by fetch_sidearm_xml)
-_sidearm_team_block: Optional[str] = None
+# Cached Sidearm team XML blocks (populated by fetch_sidearm_xml / load_sidearm_file)
+_sidearm_home_block: Optional[str] = None
+_sidearm_visitor_block: Optional[str] = None
 # Regex to match the second <team ...>...</team> block in the generated XML
 _SECOND_TEAM_RE = re.compile(
     r"(</team>\s*)"          # end of 1st team block (captured so we keep it)
     r"(<team\b.*?</team>)",  # entire 2nd team block
     re.DOTALL,
 )
+# Regex to match the first <team ...>...</team> block in the generated XML
+_FIRST_TEAM_RE = re.compile(
+    r"(<team\b[^>]*>.*?</team>)",
+    re.DOTALL,
+)
+# Regex to match the <totals>...</totals> section within a team block
+_TOTALS_RE = re.compile(r"<totals>.*?</totals>", re.DOTALL)
 
 
 def _uppercase_player_attrs(team_xml: str) -> str:
@@ -517,15 +525,45 @@ def _extract_home_team_block(text: str) -> Optional[str]:
     return None
 
 
+def _extract_visitor_team_block(text: str) -> Optional[str]:
+    """Extract the visitor team <team> block from ProScoreboard XML text.
+
+    Looks for ``<team vh="V" ...>`` first, then falls back to the first
+    ``<team>`` block if the ``vh`` attribute isn't present.
+
+    Player names and positions are uppercased for scoreboard display.
+    """
+    visitor_match = re.search(
+        r'<team\b[^>]*\bvh="V"[^>]*>.*?</team>', text, re.DOTALL
+    )
+    if visitor_match:
+        return _uppercase_player_attrs(visitor_match.group(0))
+    teams = re.findall(r"<team\b[^>]*>.*?</team>", text, re.DOTALL)
+    if teams:
+        return _uppercase_player_attrs(teams[0])
+    return None
+
+
+def _merge_visitor_preserve_totals(visitor_xml: str, existing_totals: str) -> str:
+    """Return *visitor_xml* with its ``<totals>`` section replaced by *existing_totals*.
+
+    If the visitor block already contains a ``<totals>`` section it is swapped out.
+    Otherwise the preserved totals are inserted just before the closing ``</team>`` tag.
+    """
+    if _TOTALS_RE.search(visitor_xml):
+        return _TOTALS_RE.sub(existing_totals, visitor_xml, count=1)
+    return visitor_xml.replace("</team>", "    " + existing_totals + "\n  </team>")
+
+
 def load_sidearm_file(path: str) -> None:
-    """Read a local Sidearm Sports XML file and cache the home team block."""
-    global _sidearm_team_block
+    """Read a local Sidearm Sports XML file and cache both team blocks."""
+    global _sidearm_home_block, _sidearm_visitor_block
     try:
         with open(path, "r", encoding="utf-8") as f:
             text = f.read()
         home_team_xml = _extract_home_team_block(text)
         if home_team_xml:
-            _sidearm_team_block = home_team_xml
+            _sidearm_home_block = home_team_xml
             print(
                 f"✅ Sidearm home team data loaded from file: {path}",
                 file=sys.stderr, flush=True,
@@ -533,6 +571,18 @@ def load_sidearm_file(path: str) -> None:
         else:
             print(
                 "⚠️  No home team block found in Sidearm XML file",
+                file=sys.stderr, flush=True,
+            )
+        visitor_team_xml = _extract_visitor_team_block(text)
+        if visitor_team_xml:
+            _sidearm_visitor_block = visitor_team_xml
+            print(
+                f"✅ Sidearm visitor team data loaded from file: {path}",
+                file=sys.stderr, flush=True,
+            )
+        else:
+            print(
+                "⚠️  No visitor team block found in Sidearm XML file",
                 file=sys.stderr, flush=True,
             )
     except Exception as exc:
@@ -543,8 +593,8 @@ def load_sidearm_file(path: str) -> None:
 
 
 async def fetch_sidearm_xml(url: str) -> None:
-    """Periodically fetch Sidearm Sports XML and cache the home team block."""
-    global _sidearm_team_block
+    """Periodically fetch Sidearm Sports XML and cache both team blocks."""
+    global _sidearm_home_block, _sidearm_visitor_block
     print(f"📋 Sidearm XML import enabled: {url}", file=sys.stderr, flush=True)
     async with ClientSession() as session:
         while True:
@@ -559,7 +609,7 @@ async def fetch_sidearm_xml(url: str) -> None:
                         text = await resp.text()
                         home_team_xml = _extract_home_team_block(text)
                         if home_team_xml:
-                            _sidearm_team_block = home_team_xml
+                            _sidearm_home_block = home_team_xml
                             print(
                                 "✅ Sidearm home team data cached",
                                 file=sys.stderr, flush=True,
@@ -567,6 +617,18 @@ async def fetch_sidearm_xml(url: str) -> None:
                         else:
                             print(
                                 "⚠️  No home team block found in Sidearm XML",
+                                file=sys.stderr, flush=True,
+                            )
+                        visitor_team_xml = _extract_visitor_team_block(text)
+                        if visitor_team_xml:
+                            _sidearm_visitor_block = visitor_team_xml
+                            print(
+                                "✅ Sidearm visitor team data cached",
+                                file=sys.stderr, flush=True,
+                            )
+                        else:
+                            print(
+                                "⚠️  No visitor team block found in Sidearm XML",
                                 file=sys.stderr, flush=True,
                             )
             except Exception as exc:
@@ -620,14 +682,33 @@ async def update_livedata_xml(aggregator: MetricAggregator) -> None:
             xml_content = re.sub(r'XXX-HitDistance-XXX', hit_distance, xml_content)
             xml_content = re.sub(r'XXX-Hangtime-XXX', hangtime, xml_content)
             
-            # If Sidearm data is cached, replace the second team block
-            if _sidearm_team_block is not None:
+            # If Sidearm visitor data is cached, replace the first team block
+            # while preserving the <totals> section that holds Yakker metrics.
+            if _sidearm_visitor_block is not None:
+                first_team_match = _FIRST_TEAM_RE.search(xml_content)
+                if first_team_match:
+                    current_first_team = first_team_match.group(1)
+                    totals_match = _TOTALS_RE.search(current_first_team)
+                    if totals_match:
+                        merged_visitor = _merge_visitor_preserve_totals(
+                            _sidearm_visitor_block, totals_match.group(0)
+                        )
+                    else:
+                        merged_visitor = _sidearm_visitor_block
+                    xml_content = (
+                        xml_content[: first_team_match.start(1)]
+                        + merged_visitor
+                        + xml_content[first_team_match.end(1) :]
+                    )
+
+            # If Sidearm home data is cached, replace the second team block
+            if _sidearm_home_block is not None:
                 second_team_match = _SECOND_TEAM_RE.search(xml_content)
                 if second_team_match:
                     xml_content = (
                         xml_content[: second_team_match.start()]
                         + second_team_match.group(1)
-                        + _sidearm_team_block
+                        + _sidearm_home_block
                         + xml_content[second_team_match.end() :]
                     )
 
