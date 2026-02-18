@@ -1,186 +1,227 @@
-# Yakker Stream - Live Baseball Stats Display
+# Yakker Stream
 
-> **Version 1.0** - Feature complete release
+> **Version 1.0** — Native macOS app for displaying live YakkerTech baseball sensor data on ProScoreboard video boards.
 
-Display live YakkerTech baseball data on your ProScoreboard! This Mac app connects to YakkerTech sensors and sends real-time pitch and hit data to ProPresenter's ProScoreboard for video board display.
+Yakker Stream connects to YakkerTech sensors via WebSocket, aggregates real-time pitch and hit data, and serves it over HTTP so ProPresenter's ProScoreboard can pull it onto your video board.
 
-## What This Does
+---
 
-- **Captures live data** from YakkerTech sensors (exit velocity, launch angle, pitch velocity, spin rate, hit distance, hang time)
-- **Displays metrics** in a native Mac app and web browser
-- **Sends data to ProScoreboard** for professional video board integration
-- **Configurable HTTP port** for flexible network setups
-- **Secure credential storage** using macOS Keychain
+## What It Does
+
+- **Captures live sensor data** — exit velocity, launch angle, pitch velocity, spin rate, hit distance, hang time
+- **Serves a ProScoreboard data link** at `http://localhost:PORT/livedata.xml`
+- **Shows a live web dashboard** at `http://localhost:PORT` for in-browser monitoring
+- **Filters stale and low-quality readings** with configurable timeout and minimum exit velocity
+- **Optionally imports player rosters** from a Sidearm Sports XML feed
+- **Stores credentials securely** in the macOS Keychain
+
+---
 
 ## System Requirements
 
-- **Operating System**: macOS 13.0 (Ventura) or later
-- **Python**: Version 3.7 or higher (pre-installed on most Macs)
-- **Internet**: Required for live Yakker data feed
+| Requirement | Minimum |
+|-------------|---------|
+| macOS | 13.0 (Ventura) or later |
+| Python | 3.7 or higher |
+| pip3 | Required for dependency install |
+| Internet | Required for live Yakker data |
+
+Python is pre-installed on most modern Macs. To verify: `python3 --version`
+
+---
 
 ## Installation
 
-### Step 1: Download the App
+### Step 1: Download
 
 1. Go to the [Releases](../../releases) page
 2. Download the latest `YakkerStreamApp.zip`
-3. Unzip the file (double-click it)
+3. Unzip and move `YakkerStreamApp.app` to your Applications folder
 
 ### Step 2: Allow the App to Run
 
-Since this app is distributed via GitHub (not the Mac App Store), macOS will initially block it. Here's how to allow it:
+macOS will block the app on first launch since it's not from the App Store.
 
-**Method 1: Right-Click to Open (Recommended)**
-1. Locate `YakkerStreamApp.app` in Finder
-2. **Right-click** (or Control-click) on the app
-3. Select **"Open"** from the menu
-4. Click **"Open"** in the dialog that appears
-5. The app will now open and you won't need to do this again
+**Recommended — Right-click to open:**
+1. Right-click (or Control-click) `YakkerStreamApp.app`
+2. Select **Open**
+3. Click **Open** in the confirmation dialog
+4. You won't need to do this again
 
-**Method 2: System Settings**
-1. Try to open the app normally (double-click)
-2. If macOS blocks it, open **System Settings** → **Privacy & Security**
-3. Scroll down to find the message about YakkerStreamApp being blocked
-4. Click **"Open Anyway"**
-5. Enter your password if prompted
+**Alternative — System Settings:**
+1. Try to open the app; macOS will block it
+2. Open **System Settings → Privacy & Security**
+3. Find the blocked app message and click **Open Anyway**
 
-**Method 3: Terminal (Advanced Users)**
-If the above methods don't work, open Terminal and run:
+**Advanced — Terminal:**
 ```bash
 xattr -cr /path/to/YakkerStreamApp.app
 ```
-Replace `/path/to/` with the actual location of the app.
 
-### Step 3: First-Time Setup
+### Step 3: Enter Your Credentials
 
-1. Launch the app
-2. Click **"How to Get Credentials"** for instructions on finding your Yakker domain and authorization key
+1. Launch the app — settings expand automatically on first run
+2. Click **"How to Get Credentials"** for step-by-step instructions
 3. Enter your **Yakker Domain** (e.g., `yourdomain.yakkertech.com`)
 4. Enter your **Authorization Key** (e.g., `Basic YOUR_AUTH_TOKEN`)
-5. Your settings are saved automatically
+5. Settings save automatically
+
+> Your authorization key is stored encrypted in the macOS Keychain, not in plain text.
+
+---
 
 ## Using the App
 
-1. **Start the Stream**: Click the "Start Stream" button
-2. **View Metrics**: Live metrics appear in the app window once connected
-3. **Web Interface**: Click the localhost link to view data in your browser
-4. **Stop the Stream**: Click "Stop Stream" when finished
+1. Click **Start Stream** — the backend launches and connects to YakkerTech
+2. Watch the **terminal output** panel for live connection logs
+3. The **status indicator** shows your connection state:
 
-### Connection Status Indicators
-
-| Icon | Meaning |
-|------|---------|
-| ● Green | Connected and running |
-| ● Yellow | Connecting |
-| ● Gray | Disconnected |
+| Indicator | Meaning |
+|-----------|---------|
+| ● Green | Connected and streaming |
+| ● Yellow | Connecting… |
+| ● Gray | Stopped |
 | ● Red | Error |
+
+4. Click **Copy URL** to copy the ProScoreboard data link to your clipboard
+5. Click **Stop Stream** when you're done
+
+---
+
+## Settings
+
+Open the gear icon (⚙) to configure. Settings are disabled while the stream is running.
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| Yakker Domain | — | Your YakkerTech subdomain (e.g., `yourteam.yakkertech.com`) |
+| Authorization Key | — | Base64 auth header from browser dev tools |
+| HTTP Port | 80 | Port for the local data server |
+| Stale Timeout | 10s | Seconds before a metric is considered expired and cleared |
+| Min Exit Velocity Filter | On / 65 mph | Ignores soft throws (e.g., catcher throwbacks) below the threshold |
+
+### Sidearm Sports Integration (Optional)
+
+Yakker Stream can import your player roster from a Sidearm Sports XML feed to enrich the data display. Configure a **URL** (fetched every 30 seconds) or a **local file path** under the Player Info section in settings.
+
+---
 
 ## Connecting to ProScoreboard
 
-1. Open ProPresenter
-2. Go to your Scoreboard
-3. Click the **Edit Button** (Pencil icon)
-4. Click **Settings**
-5. Enable **Data Link**
-6. Enter URL: `http://localhost:8000/livedata.xml`
-7. Click **Turn Data On**
+1. Open ProPresenter and navigate to your Scoreboard
+2. Click the **Edit** (pencil) icon → **Settings**
+3. Enable **Data Link**
+4. Set the URL to: `http://localhost:80/livedata.xml`
+   *(Replace `80` with your configured port if you changed it)*
+5. Click **Turn Data On**
 
-Done! Your Yakker data is now feeding ProScoreboard.
+Yakker data will now feed your video board in real time.
 
-## How Data is Mapped
+---
 
-The program maps Yakker sensor data to ProScoreboard's baseball XML format:
+## Data Mapping
 
-| Yakker Metric | ProScoreboard Field | XML Field |
-|---------------|---------------------|-----------|
+ProScoreboard expects standard baseball stat fields in its XML. Since we're displaying sensor data rather than game stats, Yakker Stream maps each metric to an available field:
+
+| Yakker Metric | ProScoreboard Field | XML Attribute |
+|---------------|---------------------|---------------|
 | Exit Velocity (mph) | Visitor Hits | `<hitting h="">` |
-| Launch Angle (degrees) | Visitor RBI | `<hitting rbi="">` |
-| Hit Distance (feet) | Visitor Doubles | `<hitting double="">` |
-| Hang Time (seconds) | Visitor Triples | `<hitting triple="">` |
+| Launch Angle (°) | Visitor RBI | `<hitting rbi="">` |
+| Hit Distance (ft) | Visitor Doubles | `<hitting double="">` |
+| Hang Time (sec) | Visitor Triples | `<hitting triple="">` |
 | Pitch Velocity (mph) | Visitor Earned Runs | `<pitching er="">` |
 | Spin Rate (rpm) | Visitor Pitches | `<pitching pitches="">` |
 
-### Why These Fields?
+Customize your ProScoreboard layout to label and position these fields however you like on the video board.
 
-ProScoreboard expects baseball stats in specific XML fields. Since we're showing live sensor data (not actual game stats), we "borrow" these fields to display our metrics. Customize your ProScoreboard layout to show these values wherever you want on your video board.
+---
 
-## URLs
+## Available Endpoints
 
-The following URLs are available when the stream is running (default port 8000, configurable in app settings):
+While the stream is running (default port 80):
 
-| Purpose | URL |
-|---------|-----|
-| View live data in browser | http://localhost:8000 |
-| ProScoreboard Data Link | http://localhost:8000/livedata.xml |
-| Simple XML feed | http://localhost:8000/data.xml |
+| URL | Description |
+|-----|-------------|
+| `http://localhost:80` | Live web dashboard with all metrics |
+| `http://localhost:80/livedata.xml` | ProScoreboard data link (baseball XML format) |
+| `http://localhost:80/data.xml` | Simple XML feed |
 
-> **Note:** If you change the HTTP port in the app settings, replace 8000 with your configured port number.
+---
 
 ## Troubleshooting
 
-### App Won't Open / "Unidentified Developer" Error
-
-See **Step 2** above for instructions on allowing the app to run.
+### App won't open / "Unidentified Developer" error
+See [Step 2](#step-2-allow-the-app-to-run) above.
 
 ### "Backend process stopped unexpectedly"
+- Python 3 is not installed or not in PATH → [Download Python](https://www.python.org/downloads/mac-osx/)
+- pip3 is missing → install via `python3 -m ensurepip`
+- Script permissions issue → run `chmod +x` on the app's support scripts
 
-This can happen if:
-- Python is not installed or not in the PATH
-- Required Python dependencies are missing
+### Connection status shows Error
+1. Verify your internet connection
+2. Confirm the Yakker domain is reachable in a browser
+3. Authorization keys can expire — re-extract a fresh key from your browser's Network tab in developer tools
 
-**Solution**: Open Terminal and run:
-```bash
-python3 --version
-```
-If Python isn't installed, download it from: https://www.python.org/downloads/mac-osx/
+### ProScoreboard not updating
+1. Confirm the app shows ● Green status
+2. Open `http://localhost:80/livedata.xml` in a browser — if data appears there, the issue is in ProScoreboard's Data Link config
+3. Verify **Turn Data On** is enabled and the URL matches exactly
 
-### Connection Status Shows Error
+### Port already in use
+The app automatically attempts to free the configured port on startup. If it can't:
+- Change the HTTP Port in settings to an unused port (e.g., `8001`)
 
-1. Check your internet connection
-2. Verify your Yakker domain is correct
-3. Make sure your authorization key is valid (keys can expire)
-4. Try obtaining a fresh authorization key from your browser's developer tools
+### Metrics clearing too quickly / not clearing fast enough
+Adjust the **Stale Timeout** in settings. Lower values clear stale readings faster; higher values keep the last reading displayed longer between pitches.
 
-### ProScoreboard Not Updating
+### Soft throws showing up as hits
+Enable the **Min Exit Velocity Filter** in settings and set the threshold (default 65 mph). Readings below the threshold are ignored.
 
-1. Verify the app shows "Connected" status
-2. Check that the Data Link URL is: `http://localhost:8000/livedata.xml`
-3. Ensure "Turn Data On" is enabled in ProScoreboard
-4. Try viewing http://localhost:8000/livedata.xml in a browser to confirm data is flowing
-
-### Port Already in Use
-
-If another application is using the default port (8000), you can either:
-- Change the HTTP port in the app's Configuration settings
-- Stop the other application using that port
-
-The app will automatically attempt to free the port when starting, but if it cannot, try specifying a different port.
+---
 
 ## Building from Source
 
-For developers who want to build the app themselves:
+```bash
+git clone <this repo>
+cd yakkerstream-app/YakkerStreamApp
+./build.sh
+```
 
-1. Clone this repository
-2. Open `YakkerStreamApp/YakkerStreamApp.xcodeproj` in Xcode
-3. Build and run (⌘R) or archive for distribution
+The compiled app will be at `./build/Build/Products/Release/YakkerStreamApp.app`.
 
-See [YakkerStreamApp/README.md](YakkerStreamApp/README.md) for detailed development instructions.
+To verify system requirements before building:
+```bash
+./check-system.sh
+```
+
+For detailed development documentation, see [YakkerStreamApp/README.md](YakkerStreamApp/README.md).
+
+---
 
 ## Additional Resources
 
-- **YAKKER_METRICS.md** - Complete reference of all available Yakker data points and the six metrics mapped in Version 1
-- **Yakker-Stream-How-To.pdf** - Visual guide for setup (if available)
+- **[YAKKER_METRICS.md](YAKKER_METRICS.md)** — Full reference of all available Yakker data points and the six metrics mapped in Version 1.0
+- **[YakkerStreamApp/UI_OVERVIEW.md](YakkerStreamApp/UI_OVERVIEW.md)** — UI component documentation
+- **[YakkerStreamApp/VISUAL_GUIDE.md](YakkerStreamApp/VISUAL_GUIDE.md)** — Architecture and file structure diagrams
+
+---
 
 ## Version History
 
 ### Version 1.0
-- Six core metrics: Exit Velocity, Launch Angle, Hit Distance, Hang Time, Pitch Velocity, Spin Rate
-- Native macOS app with SwiftUI interface
-- Configurable HTTP port
-- Secure credential storage in macOS Keychain
-- Live terminal output display
-- Copy URL to clipboard feature
+- Six core metrics: Exit Velocity, Launch Angle, Pitch Velocity, Spin Rate, Hit Distance, Hang Time
+- Native macOS SwiftUI app (macOS 13.0+)
+- Configurable HTTP port, stale timeout, and minimum exit velocity filter
+- Optional Sidearm Sports XML player roster integration
+- Secure authorization key storage in macOS Keychain
+- Live terminal output panel with 200-line scrollback
+- Copy-to-clipboard for ProScoreboard data link URL
+- Auto-expands settings on first launch when credentials are missing
+- Interactive web dashboard at `http://localhost:PORT`
+
+---
 
 ## License
 
-This is a custom program for displaying YakkerTech data on ProScoreboard video boards.
+Custom software for displaying YakkerTech sensor data on ProScoreboard video boards.

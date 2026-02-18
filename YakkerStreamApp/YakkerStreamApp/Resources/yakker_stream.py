@@ -27,7 +27,7 @@ DEFAULT_WS_URL = os.getenv(
 DEFAULT_AUTH_RAW = os.getenv(
     "YAKKER_AUTH_HEADER", ""
 )
-DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "8000"))
+DEFAULT_PORT = int(os.getenv("YAKKER_PORT", "80"))
 POLL_INTERVAL_SECONDS = float(os.getenv("YAKKER_POLL_INTERVAL", "1.0"))
 DEFAULT_STALE_TIMEOUT = int(os.getenv("YAKKER_STALE_TIMEOUT", "10"))
 DEFAULT_MIN_EXIT_VELO = float(os.getenv("YAKKER_MIN_EXIT_VELO", "65.0"))

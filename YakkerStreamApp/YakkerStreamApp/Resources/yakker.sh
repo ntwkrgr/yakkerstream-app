@@ -2,7 +2,7 @@
 set -e
 
 # Parse port from command line arguments or use default
-PORT="${YAKKER_PORT:-8000}"
+PORT="${YAKKER_PORT:-80}"
 next_is_port=false
 for arg in "$@"; do
   if [[ "$arg" =~ ^--port ]]; then
