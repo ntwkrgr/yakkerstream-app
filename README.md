@@ -96,7 +96,7 @@ Open the gear icon (⚙) to configure. Settings are disabled while the stream is
 |---------|---------|-------------|
 | Yakker Domain | — | Your YakkerTech subdomain (e.g., `yourteam.yakkertech.com`) |
 | Authorization Key | — | Base64 auth header from browser dev tools |
-| HTTP Port | 80 | Port for the local data server |
+| HTTP Port | 8000 | Port for the local data server |
 | Stale Timeout | 10s | Seconds before a metric is considered expired and cleared |
 | Min Exit Velocity Filter | On / 65 mph | Ignores soft throws (e.g., catcher throwbacks) below the threshold |
 
@@ -111,8 +111,8 @@ Yakker Stream can import your player roster from a Sidearm Sports XML feed to en
 1. Open ProPresenter and navigate to your Scoreboard
 2. Click the **Edit** (pencil) icon → **Settings**
 3. Enable **Data Link**
-4. Set the URL to: `http://localhost:80/livedata.xml`
-   *(Replace `80` with your configured port if you changed it)*
+4. Set the URL to: `http://localhost:8000/livedata.xml`
+   *(Replace `8000` with your configured port if you changed it)*
 5. Click **Turn Data On**
 
 Yakker data will now feed your video board in real time.
@@ -138,13 +138,13 @@ Customize your ProScoreboard layout to label and position these fields however y
 
 ## Available Endpoints
 
-While the stream is running (default port 80):
+While the stream is running (default port 8000):
 
 | URL | Description |
 |-----|-------------|
-| `http://localhost:80` | Live web dashboard with all metrics |
-| `http://localhost:80/livedata.xml` | ProScoreboard data link (baseball XML format) |
-| `http://localhost:80/data.xml` | Simple XML feed |
+| `http://localhost:8000` | Live web dashboard with all metrics |
+| `http://localhost:8000/livedata.xml` | ProScoreboard data link (baseball XML format) |
+| `http://localhost:8000/data.xml` | Simple XML feed |
 
 ---
 
@@ -165,7 +165,7 @@ See [Step 2](#step-2-allow-the-app-to-run) above.
 
 ### ProScoreboard not updating
 1. Confirm the app shows ● Green status
-2. Open `http://localhost:80/livedata.xml` in a browser — if data appears there, the issue is in ProScoreboard's Data Link config
+2. Open `http://localhost:8000/livedata.xml` in a browser — if data appears there, the issue is in ProScoreboard's Data Link config
 3. Verify **Turn Data On** is enabled and the URL matches exactly
 
 ### Port already in use

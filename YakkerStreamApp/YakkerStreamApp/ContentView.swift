@@ -332,7 +332,7 @@ struct SettingsView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                                 HStack {
-                                    TextField("80", value: $manager.httpPort, format: .number.grouping(.never))
+                                    TextField("8000", value: $manager.httpPort, format: .number.grouping(.never))
                                         .textFieldStyle(RoundedBorderTextFieldStyle())
                                         .disabled(manager.isRunning)
                                         .frame(width: 100)

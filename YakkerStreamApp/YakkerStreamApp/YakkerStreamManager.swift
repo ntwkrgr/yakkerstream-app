@@ -134,7 +134,7 @@ class YakkerStreamManager: ObservableObject {
     /// Grace period for backend process to terminate cleanly before forcing interrupt
     private static let processTerminationDelay: TimeInterval = 1.0
     /// Default HTTP port for backend server
-    static let defaultBackendPort = 80
+    static let defaultBackendPort = 8000
     /// Default stale timeout in seconds
     static let defaultStaleTimeout = 10
     /// Default minimum exit velocity threshold
